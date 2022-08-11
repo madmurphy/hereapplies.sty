@@ -1,0 +1,102 @@
+#\DeclareLyXModule[hereapplies.sty]{Here Applies}
+#DescriptionBegin
+#A module for cross-linking applications of concepts.
+#See the hereapplies.sty LaTeX package for more information.
+#DescriptionEnd
+#Authors: madmurphy
+
+Format 66
+
+AddToPreamble
+	\usepackage{hereapplies}
+EndPreamble
+
+InsetLayout Flex:Here_Applies
+	LyXType		custom
+	Decoration	Classic
+	LabelString	"Applies"
+	LatexType	command
+	LatexName	hereapplies
+	Requires	hereapplies
+	ForcePlain	1
+	MultiPar	0
+	NoInsetLayout	1
+	BgColor		lightgray
+	Font
+		Color		black
+		Size		Small
+	EndFont
+	LabelFont
+		Color		teal
+		Size		Small
+	EndFont
+	Argument 1
+		LabelString	"Label"
+		MenuString	"Occurrence label"
+		Tooltip		"A string that will used to build a reference label in the form “appl:concept:label”"
+		Mandatory	0
+		LabelFont
+			Color		blue
+		EndFont
+		Font
+			Color		red
+		EndFont
+	EndArgument
+End
+
+InsetLayout Flex:Here_Applies*
+	LyXType		custom
+	Decoration	Classic
+	LabelString	"Applies*"
+	LatexType	command
+	LatexName	hereapplies*
+	Requires	hereapplies
+	ForcePlain	1
+	MultiPar	0
+	NoInsetLayout	1
+	BgColor		lightgray
+	Font
+		Color		black
+		Size		Small
+	EndFont
+	LabelFont
+		Color		teal
+		Size		Small
+	EndFont
+	Argument 1
+		LabelString	"Label"
+		MenuString	"Occurrence label"
+		Tooltip		"A string that will used to build a reference label in the form “appl:concept:label”"
+		Mandatory	0
+		LabelFont
+			Color		blue
+		EndFont
+		Font
+			Color		red
+		EndFont
+	EndArgument
+End
+
+InsetLayout Flex:Where_Applies
+	LyXType		custom
+	Decoration	Classic
+	LabelString	"Applications of"
+	LatexType	command
+	LatexName	whereapplies
+	Requires	hereapplies
+	ForcePlain	1
+	MultiPar	0
+	NoInsetLayout	1
+	BgColor		lightgray
+	Font
+		Family		Typewriter
+		Color		black
+		Size		Small
+	EndFont
+	LabelFont
+		Family		Serif
+		Color		green
+		Size		Small
+	EndFont
+End
+

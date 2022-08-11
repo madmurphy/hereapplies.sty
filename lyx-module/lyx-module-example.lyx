@@ -4,11 +4,11 @@
 \begin_header
 \save_transient_properties true
 \origin unavailable
-\textclass book
-\begin_preamble
-\usepackage{hereapplies}
-\end_preamble
+\textclass article
 \use_default_options false
+\begin_modules
+hereapplies
+\end_modules
 \maintain_unincluded_children false
 \language english
 \language_package none
@@ -101,15 +101,12 @@ Some author
 
 \begin_layout Standard
 This is concept one.
- To see this concept applied, please see
-\begin_inset ERT
-status collapsed
+ To see this concept applied, please see 
+\begin_inset Flex Where Applies
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-whereapplies{conceptone}
+conceptone
 \end_layout
 
 \end_inset
@@ -119,21 +116,20 @@ whereapplies{conceptone}
 
 \begin_layout Standard
 This is concept four.
- To see this concept applied, please see
-\begin_inset ERT
-status collapsed
+ To see this concept applied, please see 
+\begin_inset Flex Where Applies
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-whereapplies{conceptfour}
+conceptfour
 \end_layout
 
 \end_inset
 
 .
- 
+\end_layout
+
+\begin_layout Standard
 \begin_inset Newpage newpage
 \end_inset
 
@@ -141,14 +137,11 @@ whereapplies{conceptfour}
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Here Applies
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-hereapplies{conceptone}
+conceptone
 \end_layout
 
 \end_inset
@@ -176,7 +169,6 @@ concept one
 \end_inset
 
  applies here.
- 
 \begin_inset Newpage newpage
 \end_inset
 
@@ -184,14 +176,11 @@ concept one
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Here Applies
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-hereapplies{conceptfour}
+conceptfour
 \end_layout
 
 \end_inset
@@ -219,7 +208,6 @@ concept four
 \end_inset
 
  applies here.
- 
 \begin_inset Newpage newpage
 \end_inset
 
@@ -227,14 +215,11 @@ concept four
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Here Applies
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-hereapplies{conceptone}
+conceptone
 \end_layout
 
 \end_inset
@@ -262,7 +247,6 @@ concept one
 \end_inset
 
  applies here.
- 
 \begin_inset Newpage newpage
 \end_inset
 
@@ -270,14 +254,11 @@ concept one
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Here Applies
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-hereapplies{conceptfour}
+conceptfour
 \end_layout
 
 \end_inset
@@ -305,7 +286,6 @@ concept four
 \end_inset
 
  applies here.
- 
 \begin_inset Newpage newpage
 \end_inset
 
@@ -313,14 +293,20 @@ concept four
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Here Applies
+status open
 
 \begin_layout Plain Layout
+\begin_inset Argument 1
+status open
 
+\begin_layout Plain Layout
+myref
+\end_layout
 
-\backslash
-hereapplies{conceptone}
+\end_inset
+
+conceptone
 \end_layout
 
 \end_inset
@@ -348,6 +334,11 @@ concept one
 \end_inset
 
  applies here.
+ This point in the document is labeled 
+\family typewriter
+appl:conceptone:myref
+\family default
+.
 \end_layout
 
 \end_body

@@ -7,9 +7,9 @@
 %
 % https://github.com/madmurphy/hereapplies.sty
 %
-% Version 0.1.0
+% Version 0.2.0
 %
-% Copyright (C) 2022 madmurphy <madmurphy333@gmail.com>
+% Copyright (c) 2022 madmurphy <madmurphy333@gmail.com>
 %
 % **Here Applies** is free software: you can redistribute it and/or modify it
 % under the terms of the GNU Affero General Public License as published by the
@@ -24,11 +24,11 @@
 % You should have received a copy of the GNU Affero General Public License
 % along with this program. If not, see <http://www.gnu.org/licenses/>.
 %
-
+%
 %
 % Example usage:
 %
-%     \documentclass[oneside]{book}
+%     \documentclass{article}
 %
 %     \usepackage{hereapplies}
 %
@@ -38,11 +38,14 @@
 %     \author{Some author}
 %
 %     \maketitle
+%
 %     This is concept one. To see this concept applied, please
-%     see\whereapplies{conceptone}.
+%     see \whereapplies{conceptone}.
 %
 %     This is concept four. To see this concept applied, please
-%     see\whereapplies{conceptfour}.\newpage
+%     see \whereapplies{conceptfour}.
+%
+%     \newpage
 %
 %     \hereapplies{conceptone}This is page \thepage. As you can see, ``concept
 %     one'' applies here.\newpage
@@ -56,56 +59,144 @@
 %     \hereapplies{conceptfour}This is page \thepage. As you can see,
 %     ``concept four'' applies here.\newpage
 %
-%     \hereapplies{conceptone}This is page \thepage. As you can see, ``concept
-%     one'' applies here.
+%     \hereapplies[myref]{conceptone}This is page \thepage. As you can
+%     see, ``concept one'' applies here. This point in the document is
+%     labeled \texttt{appl:conceptone:myref}.
 %
 %     \end{document}
 %
-
+%
 \ProvidesPackage{hereapplies}
 \RequirePackage{hyperref}
-
+%
+%
+%
+%         PRIVATE ENVIRONMENT
+%         ===================
+%
+%
 % Assign a unique number to each applicable concept
 \newcounter{@ha@concept@counter}
-
-
-% Macro `\@ha@newapplicable{concept}`
+%
+%
+% Macro `\@ha@newapplicable{concept_name}`
 % *****************************************************************************
 %
 % Initialize a new applicable concept
 %
-% Thie macro is for internal purposes only.
+% Thie macro is for internal purposes only. When invoked it sets up the helper
+% macros, counters and auxiliary files needed for keeping track of a concept.
+% If the concept was already initialized this macro will be no op.
 %
 \newcommand{\@ha@newapplicable}[1]{%
+	% Was this concept already initialized?
 	\expandafter\ifx\csname @ha@concept@#1@cursor\endcsname\relax%
+		% The concept was never initialized
 		% Move the counter to the current id
 		\stepcounter{@ha@concept@counter}%
-		% Count unnamed occurrences
+		% Count the unnamed occurrences
 		\newcounter{@ha@concept@#1@unnamed@counter}%
-		% Saved in .haN file
-		\expandafter\def\csname @ha@concept@#1@output\endcsname{}%
-		% Last page that applies
+		% The content of this macro will be saved in the .haN file
+		\expandafter\def\csname @ha@concept@#1@output\endcsname{\textbf{??}}%
+		% The last page that applies
 		\expandafter\def\csname @ha@concept@#1@cursor\endcsname{-1}%
 		% Store the id of the current concept
 		\expandafter\edef\csname @ha@concept@#1@id\endcsname{\arabic{@ha@concept@counter}}%
-		% Executes stuff in .haN file
-		\@starttoc{ha\csname @ha@concept@#1@id\endcsname}%
-		% Store all the occurrences when the document ends
+		% Initialize the .haN file
+		% The previous solution generated unwanted whitespaces:
+		%\@starttoc{ha\csname @ha@concept@#1@id\endcsname}%
+		% I am thankful to David Carlisle for the following line:
+		{\endlinechar=\m@ne\@starttoc{ha\csname @ha@concept@#1@id\endcsname}}%
+		% Store all the occurrences when the document reaches the end
 		\AtEndDocument{%
-			% Set the .haN file as the output
+			% Set the .haN file as output
 			\addtocontents{ha\csname @ha@concept@#1@id\endcsname}{%
-				% Populate the .haN file
-				\gdef\expandafter\protect\csname @ha@concept@#1@output\endcsname{%
-					% Write "p./pp. ..." to the cache
-					\csname @ha@concept@#1@preamble\endcsname\csname @ha@concept@#1@cache\endcsname%
-				}%
+				% Check that there are occurrences
+				\expandafter\ifcsname @ha@concept@#1@cache\endcsname%
+					% There are occurrences - write "p./pp. ..." to the output
+					\gdef\expandafter\protect\csname @ha@concept@#1@output\endcsname{%
+						\csname @ha@concept@#1@preamble\endcsname\csname @ha@concept@#1@cache\endcsname%
+					}%
+				\else%
+					% There are no occurrences - write "??" to the output
+					\gdef\expandafter\protect\csname @ha@concept@#1@output\endcsname{%
+						\textbf{??}%
+					}%
+				\fi%
 			}%
 		}%
 	\fi%
 }
-
-
-% Macro: `\whereapplies{concept}`
+%
+%
+% Macro: `\starred@hereapplies[occurrence_name]{concept_name}`
+% *****************************************************************************
+%
+% Equivalent to `\hereapplies*`
+%
+% Thie macro is for internal purposes - but nothing forbids invoking it
+% directly.
+%
+\newcommand{\starred@hereapplies}[2][]{%
+	% Make sure that the concept has been initialized
+	\@ha@newapplicable{#2}%
+	\ifx&#1&%
+		% The macro has been called with only one argument
+		% Assign a unique number to the unnamed occurrence
+		\stepcounter{@ha@concept@#2@unnamed@counter}%
+		% Call `\starred@hereapplies` again (recursion), but this time with 2 arguments
+		\edef\tmp{\noexpand\starred@hereapplies[__unnamed\arabic{@ha@concept@#2@unnamed@counter}__]{#2}}\tmp%
+	\else%
+		% The macro has been called with two arguments
+		% Assign a label to this occurrence
+		\label{appl:#2:#1}%
+		% If the cursor already points to the current page do nothing
+		\unless\ifnum\csname @ha@concept@#2@cursor\endcsname=\thepage%
+			% Make the cursor point to the current page
+			\expandafter\edef\csname @ha@concept@#2@cursor\endcsname{\thepage}%
+			% Is this the first occurrence?
+			\expandafter\ifcsname @ha@concept@#2@cache\endcsname%
+				% This is *not* the first occurrence
+				% Use "pp." for the preamble when there are multiple occurrences
+				\expandafter\def\csname @ha@concept@#2@preamble\endcsname{pp.~}%
+				% Populate the cache
+				\expandafter\g@addto@macro\csname @ha@concept@#2@cache\endcsname{, \pageref{appl:#2:#1}}%
+			\else%
+				% This is the first occurrence
+				% Use "p." for the preamble when there is only one occurrence
+				\expandafter\def\csname @ha@concept@#2@preamble\endcsname{p.~}%
+				% Initialize the cache
+				\expandafter\def\csname @ha@concept@#2@cache\endcsname{\pageref{appl:#2:#1}}%
+			\fi%
+		\fi%
+	\fi%
+}
+%
+%
+%
+%         PUBLIC ENVIRONMENT
+%         ===================
+%
+%
+% Macro: `\hereapplies[occurrence_name]{concept_name}`
+% *****************************************************************************
+%
+% Notify the document that here a particular concept applies
+%
+% If the `occurrence_name` argument is passed, a new label will be created in
+% the form `appl:[concept_name]:[occurrence_name]`. Without passing the
+% `occurrence_name` argument, an opaque name will be assigned to the label.
+%
+% The starred version of this macro (`\hereapplies*`) will not invoke the
+% `\phantomsection` directive before generating the label.
+%
+\newcommand{\hereapplies}{%
+	% Check if a star is present in the invocation of the command
+	\@ifstar{\starred@hereapplies}{\phantomsection\relax\starred@hereapplies}%
+}
+%
+%
+% Macro: `\whereapplies{concept_name}`
 % *****************************************************************************
 %
 % Print all the applications of a concept in the form "p./pp. ..."
@@ -115,49 +206,5 @@
 	\@ha@newapplicable{#1}%
 	% Print all the applications of the concept
 	\csname @ha@concept@#1@output\endcsname%
-}
-
-
-% Macro: `\hereapplies[label]{concept}`
-% *****************************************************************************
-%
-% Silently notify the document that here a particular concept applies
-%
-% If the `label` argument is passed, a new label will be created in the form
-% `appl:[concept]:[label]`
-%
-\newcommand{\hereapplies}[2][]{%
-	% Make sure that the concept has been initialized
-	\@ha@newapplicable{#2}%
-	\ifx&#1&%
-		% The macro has been called with only one argument...
-		% Assign a unique number to the unnamed occurrence
-		\stepcounter{@ha@concept@#2@unnamed@counter}%
-		% Call `\hereapplies` again (recursion), but this time with 2 arguments
-		\edef\tmp{\noexpand\hereapplies[__\arabic{@ha@concept@#2@unnamed@counter}__]{#2}}\tmp%
-	\else%
-		% The macro has been called with two arguments...
-		% Assign a label to this occurrence
-		\phantomsection\label{appl:#2:#1}%
-		% If the cursor is already on the current page do nothing
-		\unless\ifnum\csname @ha@concept@#2@cursor\endcsname=\thepage%
-			% Set the page cursor
-			\expandafter\edef\csname @ha@concept@#2@cursor\endcsname{\thepage}%
-			% Is this the first occurrence?
-			\expandafter\ifx\csname @ha@concept@#2@cache\endcsname\relax%
-				% This is the first occurrence
-				% Use "p." for the preamble when there is only one occurrence
-				\expandafter\def\csname @ha@concept@#2@preamble\endcsname{p.~}%
-				% Initialize the cache
-				\expandafter\def\csname @ha@concept@#2@cache\endcsname{\pageref{appl:#2:#1}}%
-			\else%
-				% This is *not* the first occurrence
-				% Use "pp." for the preamble when there are multiple occurrences
-				\expandafter\def\csname @ha@concept@#2@preamble\endcsname{pp.~}%
-				% Populate the cache
-				\expandafter\g@addto@macro\csname @ha@concept@#2@cache\endcsname{, \pageref{appl:#2:#1}}%
-			\fi%
-		\fi%
-	\fi%
 }
 

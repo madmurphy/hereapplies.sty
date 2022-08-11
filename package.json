@@ -1,10 +1,10 @@
 {
 	"name": "hereapplies.sty",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "A LaTeX package for cross-linking applications of concepts",
 	"homepage": "https://madmurphy.github.io/hereapplies.sty",
 	"author": "madmurphy",
-	"license": "GPL-3.0-or-later",
+	"license": "AGPL-3.0-or-later",
 	"repository": {
 		"url": "https://github.com/madmurphy/hereapplies.sty.git"
 	},
@@ -19,7 +19,10 @@
 		"glossary",
 		"index",
 		"latex",
+		"latex-hyperref",
 		"latex-package",
+		"lyx",
+		"lyx-module",
 		"toc"
 	]
 }
