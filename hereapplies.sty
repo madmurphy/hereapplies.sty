@@ -1,0 +1,163 @@
+%  -*- Mode: latex; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*-
+
+%
+% hereapplies.sty
+%
+% A LaTeX package for cross-linking applications of concepts
+%
+% https://github.com/madmurphy/hereapplies.sty
+%
+% Version 0.1.0
+%
+% Copyright (C) 2022 madmurphy <madmurphy333@gmail.com>
+%
+% **Here Applies** is free software: you can redistribute it and/or modify it
+% under the terms of the GNU Affero General Public License as published by the
+% Free Software Foundation, either version 3 of the License, or (at your
+% option) any later version.
+%
+% **Here Applies** is distributed in the hope that it will be useful, but
+% WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+% FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+% for more details.
+%
+% You should have received a copy of the GNU Affero General Public License
+% along with this program. If not, see <http://www.gnu.org/licenses/>.
+%
+
+%
+% Example usage:
+%
+%     \documentclass[oneside]{book}
+%
+%     \usepackage{hereapplies}
+%
+%     \begin{document}
+%
+%     \title{Some title}
+%     \author{Some author}
+%
+%     \maketitle
+%     This is concept one. To see this concept applied, please
+%     see\whereapplies{conceptone}.
+%
+%     This is concept four. To see this concept applied, please
+%     see\whereapplies{conceptfour}.\newpage
+%
+%     \hereapplies{conceptone}This is page \thepage. As you can see, ``concept
+%     one'' applies here.\newpage
+%
+%     \hereapplies{conceptfour}This is page \thepage. As you can see,
+%     ``concept four'' applies here.\newpage
+%
+%     \hereapplies{conceptone}This is page \thepage. As you can see, ``concept
+%     one'' applies here.\newpage
+%
+%     \hereapplies{conceptfour}This is page \thepage. As you can see,
+%     ``concept four'' applies here.\newpage
+%
+%     \hereapplies{conceptone}This is page \thepage. As you can see, ``concept
+%     one'' applies here.
+%
+%     \end{document}
+%
+
+\ProvidesPackage{hereapplies}
+\RequirePackage{hyperref}
+
+% Assign a unique number to each applicable concept
+\newcounter{@ha@concept@counter}
+
+
+% Macro `\@ha@newapplicable{concept}`
+% *****************************************************************************
+%
+% Initialize a new applicable concept
+%
+% Thie macro is for internal purposes only.
+%
+\newcommand{\@ha@newapplicable}[1]{%
+	\expandafter\ifx\csname @ha@concept@#1@cursor\endcsname\relax%
+		% Move the counter to the current id
+		\stepcounter{@ha@concept@counter}%
+		% Count unnamed occurrences
+		\newcounter{@ha@concept@#1@unnamed@counter}%
+		% Saved in .haN file
+		\expandafter\def\csname @ha@concept@#1@output\endcsname{}%
+		% Last page that applies
+		\expandafter\def\csname @ha@concept@#1@cursor\endcsname{-1}%
+		% Store the id of the current concept
+		\expandafter\edef\csname @ha@concept@#1@id\endcsname{\arabic{@ha@concept@counter}}%
+		% Executes stuff in .haN file
+		\@starttoc{ha\csname @ha@concept@#1@id\endcsname}%
+		% Store all the occurrences when the document ends
+		\AtEndDocument{%
+			% Set the .haN file as the output
+			\addtocontents{ha\csname @ha@concept@#1@id\endcsname}{%
+				% Populate the .haN file
+				\gdef\expandafter\protect\csname @ha@concept@#1@output\endcsname{%
+					% Write "p./pp. ..." to the cache
+					\csname @ha@concept@#1@preamble\endcsname\csname @ha@concept@#1@cache\endcsname%
+				}%
+			}%
+		}%
+	\fi%
+}
+
+
+% Macro: `\whereapplies{concept}`
+% *****************************************************************************
+%
+% Print all the applications of a concept in the form "p./pp. ..."
+%
+\newcommand{\whereapplies}[1]{%
+	% Make sure that the applicable concept is initialized
+	\@ha@newapplicable{#1}%
+	% Print all the applications of the concept
+	\csname @ha@concept@#1@output\endcsname%
+}
+
+
+% Macro: `\hereapplies[label]{concept}`
+% *****************************************************************************
+%
+% Silently notify the document that here a particular concept applies
+%
+% If the `label` argument is passed, a new label will be created in the form
+% `appl:[concept]:[label]`
+%
+\newcommand{\hereapplies}[2][]{%
+	% Make sure that the concept has been initialized
+	\@ha@newapplicable{#2}%
+	\ifx&#1&%
+		% The macro has been called with only one argument...
+		% Assign a unique number to the unnamed occurrence
+		\stepcounter{@ha@concept@#2@unnamed@counter}%
+		% Call `\hereapplies` again (recursion), but this time with 2 arguments
+		\edef\tmp{\noexpand\hereapplies[__\arabic{@ha@concept@#2@unnamed@counter}__]{#2}}\tmp%
+	\else%
+		% The macro has been called with two arguments...
+		% Assign a label to this occurrence
+		\phantomsection\label{appl:#2:#1}%
+		% If the cursor is already on the current page do nothing
+		\unless\ifnum\csname @ha@concept@#2@cursor\endcsname=\thepage%
+			% Set the page cursor
+			\expandafter\edef\csname @ha@concept@#2@cursor\endcsname{\thepage}%
+			% Is this the first occurrence?
+			\expandafter\ifx\csname @ha@concept@#2@cache\endcsname\relax%
+				% This is the first occurrence
+				% Use "p." for the preamble when there is only one occurrence
+				\expandafter\def\csname @ha@concept@#2@preamble\endcsname{p.~}%
+				% Initialize the cache
+				\expandafter\def\csname @ha@concept@#2@cache\endcsname{\pageref{appl:#2:#1}}%
+			\else%
+				% This is *not* the first occurrence
+				% Use "pp." for the preamble when there are multiple occurrences
+				\expandafter\def\csname @ha@concept@#2@preamble\endcsname{pp.~}%
+				% Populate the cache
+				\expandafter\g@addto@macro\csname @ha@concept@#2@cache\endcsname{, \pageref{appl:#2:#1}}%
+			\fi%
+		\fi%
+	\fi%
+}
+

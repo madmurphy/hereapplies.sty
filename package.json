@@ -1,0 +1,26 @@
+{
+	"name": "hereapplies.sty",
+	"version": "0.1.0",
+	"description": "A LaTeX package for cross-linking applications of concepts",
+	"homepage": "https://madmurphy.github.io/hereapplies.sty",
+	"author": "madmurphy",
+	"license": "GPL-3.0-or-later",
+	"repository": {
+		"url": "https://github.com/madmurphy/hereapplies.sty.git"
+	},
+	"src": [
+		"hereapplies.sty"
+	],
+	"bugs": {
+		"url": "https://github.com/madmurphy/hereapplies.sty/issues",
+		"email": "madmurphy333@gmail.com"
+	},
+	"keywords": [
+		"glossary",
+		"index",
+		"latex",
+		"latex-package",
+		"toc"
+	]
+}
+
