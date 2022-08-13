@@ -101,12 +101,12 @@ Some author
 
 \begin_layout Standard
 This is concept one.
- To see this concept applied, please see 
-\begin_inset Flex Where Applies
+ To find this concept applied, please see 
+\begin_inset Flex Where applies
 status open
 
 \begin_layout Plain Layout
-conceptone
+conceptOne
 \end_layout
 
 \end_inset
@@ -115,13 +115,13 @@ conceptone
 \end_layout
 
 \begin_layout Standard
-This is concept four.
- To see this concept applied, please see 
-\begin_inset Flex Where Applies
+This is concept two.
+ To find this concept applied, please see 
+\begin_inset Flex Where applies
 status open
 
 \begin_layout Plain Layout
-conceptfour
+conceptTwo
 \end_layout
 
 \end_inset
@@ -137,11 +137,11 @@ conceptfour
 \end_layout
 
 \begin_layout Standard
-\begin_inset Flex Here Applies
+\begin_inset Flex Here applies
 status open
 
 \begin_layout Plain Layout
-conceptone
+conceptOne
 \end_layout
 
 \end_inset
@@ -176,11 +176,11 @@ concept one
 \end_layout
 
 \begin_layout Standard
-\begin_inset Flex Here Applies
+\begin_inset Flex Here applies
 status open
 
 \begin_layout Plain Layout
-conceptfour
+conceptTwo
 \end_layout
 
 \end_inset
@@ -203,7 +203,7 @@ thepage
 \begin_inset Quotes eld
 \end_inset
 
-concept four
+concept two
 \begin_inset Quotes erd
 \end_inset
 
@@ -215,11 +215,11 @@ concept four
 \end_layout
 
 \begin_layout Standard
-\begin_inset Flex Here Applies
+\begin_inset Flex Here applies
 status open
 
 \begin_layout Plain Layout
-conceptone
+conceptOne
 \end_layout
 
 \end_inset
@@ -254,11 +254,11 @@ concept one
 \end_layout
 
 \begin_layout Standard
-\begin_inset Flex Here Applies
+\begin_inset Flex Here applies
 status open
 
 \begin_layout Plain Layout
-conceptfour
+conceptTwo
 \end_layout
 
 \end_inset
@@ -281,7 +281,7 @@ thepage
 \begin_inset Quotes eld
 \end_inset
 
-concept four
+concept two
 \begin_inset Quotes erd
 \end_inset
 
@@ -293,7 +293,7 @@ concept four
 \end_layout
 
 \begin_layout Standard
-\begin_inset Flex Here Applies
+\begin_inset Flex Here applies
 status open
 
 \begin_layout Plain Layout
@@ -306,7 +306,7 @@ myref
 
 \end_inset
 
-conceptone
+conceptOne
 \end_layout
 
 \end_inset
@@ -336,7 +336,7 @@ concept one
  applies here.
  This point in the document is labeled 
 \family typewriter
-appl:conceptone:myref
+myref
 \family default
 .
 \end_layout

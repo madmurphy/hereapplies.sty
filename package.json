@@ -1,7 +1,7 @@
 {
 	"name": "hereapplies.sty",
-	"version": "0.2.0",
-	"description": "A LaTeX package for cross-linking applications of concepts",
+	"version": "0.3.0",
+	"description": "A LaTeX package for cross-linking concepts to their applications",
 	"homepage": "https://madmurphy.github.io/hereapplies.sty",
 	"author": "madmurphy",
 	"license": "AGPL-3.0-or-later",

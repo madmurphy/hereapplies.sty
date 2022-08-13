@@ -1,6 +1,6 @@
 #\DeclareLyXModule[hereapplies.sty]{Here Applies}
 #DescriptionBegin
-#A module for cross-linking applications of concepts.
+#A module for cross-linking concepts to their applications.
 #See the hereapplies.sty LaTeX package for more information.
 #DescriptionEnd
 #Authors: madmurphy
@@ -11,10 +11,20 @@ AddToPreamble
 	\usepackage{hereapplies}
 EndPreamble
 
-InsetLayout Flex:Here_Applies
+InsetLayout Flex:Here_applies
 	LyXType		custom
 	Decoration	Classic
-	LabelString	"Applies"
+	Font
+		Family		Typewriter
+		Color		black
+		Size		Small
+	EndFont
+	LabelFont
+		Family		Serif
+		Color		teal
+		Size		Small
+	EndFont
+	LabelString	"Here applies"
 	LatexType	command
 	LatexName	hereapplies
 	Requires	hereapplies
@@ -22,32 +32,29 @@ InsetLayout Flex:Here_Applies
 	MultiPar	0
 	NoInsetLayout	1
 	BgColor		lightgray
+	Argument 1
+		Decoration	Classic
+		LabelString	"Label"
+		MenuString	"Instance label"
+		Tooltip		"A string that will become the label of the instance (which can be referenced with \ref, \pageref, etc.)"
+		Mandatory	0
+	EndArgument
+End
+
+InsetLayout Flex:Here_applies*
+	LyXType		custom
+	Decoration	Classic
 	Font
+		Family		Typewriter
 		Color		black
 		Size		Small
 	EndFont
 	LabelFont
+		Family		Serif
 		Color		teal
 		Size		Small
 	EndFont
-	Argument 1
-		LabelString	"Label"
-		MenuString	"Occurrence label"
-		Tooltip		"A string that will used to build a reference label in the form “appl:concept:label”"
-		Mandatory	0
-		LabelFont
-			Color		blue
-		EndFont
-		Font
-			Color		red
-		EndFont
-	EndArgument
-End
-
-InsetLayout Flex:Here_Applies*
-	LyXType		custom
-	Decoration	Classic
-	LabelString	"Applies*"
+	LabelString	"Here applies*"
 	LatexType	command
 	LatexName	hereapplies*
 	Requires	hereapplies
@@ -55,39 +62,18 @@ InsetLayout Flex:Here_Applies*
 	MultiPar	0
 	NoInsetLayout	1
 	BgColor		lightgray
-	Font
-		Color		black
-		Size		Small
-	EndFont
-	LabelFont
-		Color		teal
-		Size		Small
-	EndFont
 	Argument 1
+		Decoration	Classic
 		LabelString	"Label"
-		MenuString	"Occurrence label"
-		Tooltip		"A string that will used to build a reference label in the form “appl:concept:label”"
+		MenuString	"Instance label"
+		Tooltip		"A string that will become the label of the instance (which can be referenced with \ref, \pageref, etc.)"
 		Mandatory	0
-		LabelFont
-			Color		blue
-		EndFont
-		Font
-			Color		red
-		EndFont
 	EndArgument
 End
 
-InsetLayout Flex:Where_Applies
+InsetLayout Flex:Where_applies
 	LyXType		custom
 	Decoration	Classic
-	LabelString	"Applications of"
-	LatexType	command
-	LatexName	whereapplies
-	Requires	hereapplies
-	ForcePlain	1
-	MultiPar	0
-	NoInsetLayout	1
-	BgColor		lightgray
 	Font
 		Family		Typewriter
 		Color		black
@@ -98,5 +84,36 @@ InsetLayout Flex:Where_Applies
 		Color		green
 		Size		Small
 	EndFont
+	LabelString	"Applications of"
+	LatexType	command
+	LatexName	whereapplies
+	Requires	hereapplies
+	ForcePlain	1
+	MultiPar	0
+	NoInsetLayout	1
+	BgColor		lightgray
+End
+
+InsetLayout Flex:Where_applies*
+	LyXType		custom
+	Decoration	Classic
+	Font
+		Family		Typewriter
+		Color		black
+		Size		Small
+	EndFont
+	LabelFont
+		Family		Serif
+		Color		green
+		Size		Small
+	EndFont
+	LabelString	"Applications of*"
+	LatexType	command
+	LatexName	whereapplies*
+	Requires	hereapplies
+	ForcePlain	1
+	MultiPar	0
+	NoInsetLayout	1
+	BgColor		lightgray
 End
 
