@@ -1,5 +1,5 @@
 %  -*- Mode: latex; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*-
-
+%
 %
 % hereapplies.sty
 %
@@ -7,9 +7,9 @@
 %
 % https://github.com/madmurphy/hereapplies.sty
 %
-% Version 0.3.0
+% Version 0.3.1
 %
-% Copyright (c) 2022 madmurphy <madmurphy333@gmail.com>
+% Copyright (C) 2022 madmurphy <madmurphy333@gmail.com>
 %
 % **Here Applies** is free software: you can redistribute it and/or modify it
 % under the terms of the GNU Affero General Public License as published by the
@@ -35,6 +35,7 @@
 %     \begin{document}
 %
 %     \title{Some title}
+%
 %     \author{Some author}
 %
 %     \maketitle
@@ -81,16 +82,16 @@
 \newcounter{@ha@unlabeled@counter}
 %
 %
-% Macro `\@ha@newapplicable{concept_name}`
+% Macro `\@ha@newapplicable{ConceptName}`
 % *****************************************************************************
 %
 % Initialize a new applicable concept
 %
-% Thie macro is for internal purposes only. When invoked, it sets up the helper
+% This macro is for internal purposes only. When invoked, it sets up the helper
 % macros, counters and auxiliary files needed for keeping track of a concept.
-% If the concept was already initialized this macro will be no op.
+% If the concept was already initialized the macro will be no op.
 %
-% The `concept_name` argument may contain only letters and the "at" sign (`@`).
+% The `ConceptName` argument may contain only letters and the "at" sign (`@`).
 %
 \newcommand{\@ha@newapplicable}[1]{%
 	% Was this concept already initialized?
@@ -116,15 +117,6 @@
 			% Make sure that there are occurrences
 			\expandafter\ifcsname @ha@prop@@preamble@#1\endcsname%
 				% There are occurrences
-				% When `\hereapplies` is the last directive of the document and
-				% is not followed by any text, due to an unknown bug
-				% `\whereapplies` prints "??" even when there are occurrences
-				% of a concept. Uncommenting the `\phantom` macro below fixes
-				% the bug, yet it might be wiser to leave the choice to the
-				% user and search for more final solutions in the meanwhile.
-				% The `\phantom{}` directive can also be inserted
-				% manually at the end of the document.
-				%\phantom{}%
 				% Set the .haN file as output
 				\addtocontents{ha\csname @ha@prop@@id@#1\endcsname}{%
 					% Write "p./pp. \pageref..." to the output
@@ -142,33 +134,33 @@
 }
 %
 %
-% Macro: `\@ha@getpropat{property_name}{concept_name}`
+% Macro: `\@ha@getpropat{PropertyName}{ConceptName}`
 % *****************************************************************************
 %
 % Get the current value of a concept's property
 %
-% Thie macro is for internal purposes (but nothing forbids invoking it
+% This macro is for internal purposes (but nothing forbids invoking it
 % directly).
 %
-% Possible values for the `property_name` argument are: `cursor`, `id`,
+% Possible values for the `PropertyName` argument are: `cursor`, `id`,
 % `preamble`, `scache`, `soutput`, `ucache`, `uoutput`.
 %
-% The `concept_name` argument may contain only letters and the "at" sign (`@`).
+% The `ConceptName` argument may contain only letters and the "at" sign (`@`).
 %
 \newcommand{\@ha@getpropat}[2]{%
 	% Make sure that the applicable concept is initialized
 	\@ha@newapplicable{#2}%
-	% Print all the occurrences of the concept
+	% Print the concept's property
 	\csname @ha@prop@@#1@#2\endcsname%
 }
 %
 %
-% Macro: `\starred@labeled@hereapplies{label}{concept_name}`
+% Macro: `\starred@labeled@hereapplies{Label}{ConceptName}`
 % *****************************************************************************
 %
 % Equivalent to `\hereapplies*`, but the two arguments are both mandatory
 %
-% Thie macro is for internal purposes (but nothing forbids invoking it
+% This macro is for internal purposes (but nothing forbids invoking it
 % directly). See the documentation of `\hereapplies` for more information.
 %
 \newcommand{\starred@labeled@hereapplies}[2]{%
@@ -196,18 +188,18 @@
 			% Initialize the starred cache
 			\expandafter\def\csname @ha@prop@@scache@#2\endcsname{\pageref*{#1}}%
 		\fi%
-		% Make the cursor point to the current page
+		% Let the cursor point to the current page
 		\expandafter\edef\csname @ha@prop@@cursor@#2\endcsname{\thepage}%
 	\fi%
 }
 %
 %
-% Macro: `\starred@hereapplies[label]{concept_name}`
+% Macro: `\starred@hereapplies[Label]{ConceptName}`
 % *****************************************************************************
 %
 % Equivalent to `\hereapplies*`
 %
-% Thie macro is for internal purposes (but nothing forbids invoking it
+% This macro is for internal purposes (but nothing forbids invoking it
 % directly). See the documentation of `\hereapplies` for more information.
 %
 \newcommand{\starred@hereapplies}[2][]{%
@@ -230,7 +222,7 @@
 %         ===================
 %
 %
-% Macro: `\hereapplies[label]{concept_name}`
+% Macro: `\hereapplies[Label]{ConceptName}`
 % *****************************************************************************
 %
 % Notify the document that a particular concept applies and create a label for
@@ -240,7 +232,7 @@
 % accordingly, otherwise an opaque name will be assigned to it. This argument
 % may contain only what is legal in both `\label` and `\pageref`.
 %
-% The `concept_name` argument may contain only letters and the "at" sign (`@`).
+% The `ConceptName` argument may contain only letters and the "at" sign (`@`).
 %
 % The starred version of this macro (`\hereapplies*`) does not invoke the
 % `\phantomsection` directive.
@@ -251,12 +243,12 @@
 }
 %
 %
-% Macro: `\whereapplies{concept_name}`
+% Macro: `\whereapplies{ConceptName}`
 % *****************************************************************************
 %
 % Print all the occurrences of a concept in the form "p. ..." or "pp. ..."
 %
-% The `concept_name` argument may contain only letters and the "at" sign (`@`).
+% The `ConceptName` argument may contain only letters and the "at" sign (`@`).
 %
 % The starred version of this macro (`\whereapplies*`) will use `\pageref*`
 % instead of `\pageref` for generating the page list.
