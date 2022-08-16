@@ -7,7 +7,7 @@
 %
 % https://github.com/madmurphy/hereapplies.sty
 %
-% Version 0.3.1
+% Version 0.4.0
 %
 % Copyright (C) 2022 madmurphy <madmurphy333@gmail.com>
 %
@@ -40,25 +40,29 @@
 %
 %     \maketitle
 %
-%     This is concept one. To find this concept applied, please
-%     see \whereapplies{conceptOne}.
+%     This is concept one. To find this concept applied, please see
+%     \whereapplies{conceptOne}.
 %
-%     This is concept two. To find this concept applied, please
-%     see \whereapplies{conceptTwo}.
-%
-%     \newpage
+%     This is concept two. To find this concept applied, please see
+%     \whereapplies{conceptTwo}.\newpage
 %
 %     \hereapplies{conceptOne}This is page \thepage. As you can see, ``concept
 %     one'' applies here.\newpage
 %
-%     \hereapplies{conceptTwo}This is page \thepage. As you can see,
-%     ``concept two'' applies here.\newpage
+%     \hereapplies{conceptTwo}This is page \thepage. As you can see, ``concept
+%     two'' applies here.\newpage
 %
 %     \hereapplies{conceptOne}This is page \thepage. As you can see, ``concept
 %     one'' applies here.\newpage
 %
-%     \hereapplies{conceptTwo}This is page \thepage. As you can see,
-%     ``concept two'' applies here.\newpage
+%     \hereapplies{conceptTwo}This is page \thepage. As you can see, ``concept
+%     two'' applies here.\newpage
+%
+%     \hereapplies{conceptTwo}This is page \thepage. As you can see, ``concept
+%     two'' applies here.\newpage
+%
+%     \hereapplies{conceptTwo}This is page \thepage. As you can see, ``concept
+%     two'' applies here.\newpage
 %
 %     \hereapplies[myref]{conceptOne}This is page \thepage. As you can
 %     see, ``concept one'' applies here. This point in the document is
@@ -69,6 +73,7 @@
 %
 \ProvidesPackage{hereapplies}
 \RequirePackage{hyperref}
+\RequirePackage{refcount}
 %
 %
 %
@@ -76,56 +81,158 @@
 %         ===================
 %
 %
-% Assign a unique number to each applicable concept
+% Assign a unique number to each concept
 \newcounter{@ha@concept@counter}
 % Assign a unique number to each unnamed occurrence of a concept
 \newcounter{@ha@unlabeled@counter}
 %
 %
-% Macro `\@ha@newapplicable{ConceptName}`
+% Macro `\@ha@makeoccurrencelist{HyperrefMacro}{LabelList}`
 % *****************************************************************************
 %
-% Initialize a new applicable concept
+% Generate the list of page numbers with page range support
+%
+% This macro is for internal purposes only. When invoked, it scans the list of
+% labels provided (`LabelList`) and checks which labels refer to duplicate page
+% numbers and which page numbers can be grouped together.
+%
+% The `HyperrefMacro` argument is the macro from the `hyperref` package that
+% will process the label name. This should be either `T@pageref` -- equivalent
+% to `\pageref` -- or `@pagerefstar` -- equivalent to `\pageref*`.
+%
+% The `ConceptName` argument may contain only Latin letters and the "at" sign
+% (`@`). This string remains confined within the internal scope of the package
+% and does not create conflicts with possible macros or labels of the same
+% name.
+%
+% The `LabelList` must be a comma-separated list of labels.
+%
+\newcommand{\@ha@makeoccurrencelist}[2]{%
+	% Reset the current page number
+	\def\@ha@tmp@@currp{-1}%
+	% Reset the current range offset
+	\def\@ha@tmp@@prangeoffs{-1}%
+	% Iterate through the `LabelList` argument
+	\@for\@ha@tmp@@thislabel:=#2\do{%
+		% Store the page number associated with this label
+		\edef\@ha@tmp@@nextp{\getpagerefnumber{\@ha@tmp@@thislabel}}%
+		% Check that we are not on the same page as in the last iteration
+		\unless\ifnum\@ha@tmp@@currp=\@ha@tmp@@nextp%
+			% This is not the same page as in the last iteration
+			% Is this the first page in which this concept appears?
+			\unless\ifnum\@ha@tmp@@currp=-1%
+				% This is not the first page in which this concept appears
+				% Does this page follow immediately the previous label's page?
+				\ifnum\numexpr\@ha@tmp@@currp+1=\@ha@tmp@@nextp%
+					% This page follows immediately the previous label's page
+					% Are these the first contiguous pages that we encounter?
+					\ifnum\@ha@tmp@@prangeoffs=-1%
+						% These are the first contiguous pages we encounter
+						% Store the first page number of the pair
+						\edef\@ha@tmp@@prangeoffs{\@ha@tmp@@currp}%
+						% Store the first label of the pair
+						\edef\@ha@tmp@@currrangelbl{\@ha@tmp@@currlbl}%
+					\fi%
+				\else%
+					% This page is far from the previous label's page
+					% Was the previous page part of a contiguous range?
+					\ifnum\@ha@tmp@@prangeoffs=-1%
+						% The previous page was a standalone page
+						% Print "[p], "
+						{\csname #1\endcsname{\@ha@tmp@@currlbl}, }%
+					\else%
+						% The previous page was part of a contiguous range
+						% Print "[p--q], "
+						{\csname #1\endcsname{\@ha@tmp@@currrangelbl}--\csname
+							#1\endcsname{\@ha@tmp@@currlbl}, }%
+						% Reset the current range offset
+						\def\@ha@tmp@@prangeoffs{-1}%
+					\fi%
+				\fi%
+			\fi%
+			% Prepare the next page number
+			\edef\@ha@tmp@@currp{\@ha@tmp@@nextp}%
+			% Prepare the next label
+			\edef\@ha@tmp@@currlbl{\@ha@tmp@@thislabel}%
+		\fi%
+	}%
+	% Print the last page number
+	% Is there at least one page to print?
+	\unless\ifnum\@ha@tmp@@currp=-1%
+		% There is at least one page to print
+		% Was the previous page part of a contiguous range?
+		\ifnum\@ha@tmp@@prangeoffs=-1%
+			% The previous page was a standalone page
+			% Print "[p], "
+			{\csname #1\endcsname{\@ha@tmp@@currlbl}}%
+		\else%
+			% The previous page was part of a contiguous range
+			% Print "[p--q], "
+			{\csname #1\endcsname{\@ha@tmp@@currrangelbl}--\csname
+				#1\endcsname{\@ha@tmp@@currlbl}}%
+		\fi%
+	\fi%
+}
+%
+%
+% Macro `\@ha@newconcept{ConceptName}`
+% *****************************************************************************
+%
+% Initialize a new concept
 %
 % This macro is for internal purposes only. When invoked, it sets up the helper
 % macros, counters and auxiliary files needed for keeping track of a concept.
 % If the concept was already initialized the macro will be no op.
 %
-% The `ConceptName` argument may contain only letters and the "at" sign (`@`).
+% The `ConceptName` argument may contain only Latin letters and the "at" sign
+% (`@`). This string remains confined within the internal scope of the package
+% and does not create conflicts with possible macros or labels of the same
+% name.
 %
-\newcommand{\@ha@newapplicable}[1]{%
+\newcommand{\@ha@newconcept}[1]{%
 	% Was this concept already initialized?
-	\expandafter\ifx\csname @ha@prop@@cursor@#1\endcsname\relax%
+	\expandafter\ifx\csname @ha@prop@@count@#1\endcsname\relax%
 		% The concept was never initialized
-		% Move the counter to the current id
-		\stepcounter{@ha@concept@counter}%
 		% Set the output to "??" - it will be updated by the .haN file
-		\expandafter\def\csname @ha@prop@@uoutput@#1\endcsname{\textbf{??}}%
+		\expandafter\gdef\csname @ha@prop@@uoutput@#1\endcsname{\textbf{??}}%
 		% Set the starred output to "??" - it will be updated by the .haN file
-		\expandafter\def\csname @ha@prop@@soutput@#1\endcsname{\textbf{??}}%
-		% The last page that applies
-		\expandafter\def\csname @ha@prop@@cursor@#1\endcsname{-1}%
-		% Store the id of the current concept
-		\expandafter\edef\csname @ha@prop@@id@#1\endcsname{\arabic{@ha@concept@counter}}%
+		\expandafter\gdef\csname @ha@prop@@soutput@#1\endcsname{\textbf{??}}%
+		% Use "p." for the preamble when there is only one occurrence
+		\expandafter\gdef\csname @ha@prop@@preamble@#1\endcsname{p.~}%
+		% Increase the counter of concepts
+		\stepcounter{@ha@concept@counter}%
+		% Store the current value of the counter of concepts
+		\expandafter\xdef\csname
+			@ha@prop@@count@#1\endcsname{\the@ha@concept@counter}%
 		% Initialize the .haN file
 		% Previous versions had this line, which created unwanted whitespaces:
-		%\@starttoc{ha\csname @ha@prop@@id@#1\endcsname}%
+		%\@starttoc{ha\csname @ha@prop@@count@#1\endcsname}%
 		% I am thankful to David Carlisle for the following replacement:
-		{\endlinechar=\m@ne\@starttoc{ha\csname @ha@prop@@id@#1\endcsname}}%
+		{\endlinechar=\m@ne\@starttoc{ha\csname @ha@prop@@count@#1\endcsname}}%
 		% Store all the occurrences when the document reaches the end
 		\AtEndDocument{%
 			% Make sure that there are occurrences
-			\expandafter\ifcsname @ha@prop@@preamble@#1\endcsname%
+			\expandafter\ifcsname @ha@prop@@labels@#1\endcsname%
 				% There are occurrences
 				% Set the .haN file as output
-				\addtocontents{ha\csname @ha@prop@@id@#1\endcsname}{%
+				\addtocontents{ha\csname @ha@prop@@count@#1\endcsname}{%
 					% Write "p./pp. \pageref..." to the output
 					\gdef\expandafter\protect\csname @ha@prop@@uoutput@#1\endcsname{%
-						\csname @ha@prop@@preamble@#1\endcsname\csname @ha@prop@@ucache@#1\endcsname%
+						% Preamble (either "p." or "pp.")
+						\csname @ha@prop@@preamble@#1\endcsname%
+						% `\T@pageref` is a synonym of `\pageref`
+						\expandafter\protect\csname
+							@ha@makeoccurrencelist\endcsname{T@pageref}{\csname
+								@ha@prop@@labels@#1\endcsname}%
 					}%
 					% Write "p./pp. \pageref*..." to the starred output
 					\gdef\expandafter\protect\csname @ha@prop@@soutput@#1\endcsname{%
-						\csname @ha@prop@@preamble@#1\endcsname\csname @ha@prop@@scache@#1\endcsname%
+						% Preamble (either "p." or "pp.")
+						\csname @ha@prop@@preamble@#1\endcsname%
+						% `\@pagerefstar` is a synonym of `\pageref*`
+						\expandafter\protect\csname
+							@ha@makeoccurrencelist\endcsname{@pagerefstar}{\csname
+								@ha@prop@@labels@#1\endcsname}%
 					}%
 				}%
 			\fi%
@@ -137,19 +244,22 @@
 % Macro: `\@ha@getpropat{PropertyName}{ConceptName}`
 % *****************************************************************************
 %
-% Get the current value of a concept's property
+% Get the value of a concept's property
 %
 % This macro is for internal purposes (but nothing forbids invoking it
-% directly).
+% directly). If a concept was never initialized the macro will initialize it.
 %
-% Possible values for the `PropertyName` argument are: `cursor`, `id`,
-% `preamble`, `scache`, `soutput`, `ucache`, `uoutput`.
+% Possible values for the `PropertyName` argument are: `count`, `labels`,
+% `preamble`, `soutput`, `uoutput`.
 %
-% The `ConceptName` argument may contain only letters and the "at" sign (`@`).
+% The `ConceptName` argument may contain only Latin letters and the "at" sign
+% (`@`). This string remains confined within the internal scope of the package
+% and does not create conflicts with possible macros or labels of the same
+% name.
 %
 \newcommand{\@ha@getpropat}[2]{%
-	% Make sure that the applicable concept is initialized
-	\@ha@newapplicable{#2}%
+	% Make sure that the concept is initialized
+	\@ha@newconcept{#2}%
 	% Print the concept's property
 	\csname @ha@prop@@#1@#2\endcsname%
 }
@@ -165,31 +275,17 @@
 %
 \newcommand{\starred@labeled@hereapplies}[2]{%
 	% Make sure that the concept has been initialized
-	\@ha@newapplicable{#2}%
+	\@ha@newconcept{#2}%
 	% Assign a label to this occurrence
 	\label{#1}%
-	% If the cursor already points to the current page do nothing
-	\unless\ifnum\csname @ha@prop@@cursor@#2\endcsname=\thepage%
-		% Is this the first occurrence?
-		\expandafter\ifcsname @ha@prop@@preamble@#2\endcsname%
-			% This is *not* the first occurrence
-			% Use "pp." for the preamble when there are multiple occurrences
-			\expandafter\def\csname @ha@prop@@preamble@#2\endcsname{pp.~}%
-			% Populate the cache
-			\expandafter\g@addto@macro\csname @ha@prop@@ucache@#2\endcsname{, \pageref{#1}}%
-			% Populate the starred cache
-			\expandafter\g@addto@macro\csname @ha@prop@@scache@#2\endcsname{, \pageref*{#1}}%
-		\else%
-			% This is the first occurrence
-			% Use "p." for the preamble when there is only one occurrence
-			\expandafter\def\csname @ha@prop@@preamble@#2\endcsname{p.~}%
-			% Initialize the cache
-			\expandafter\def\csname @ha@prop@@ucache@#2\endcsname{\pageref{#1}}%
-			% Initialize the starred cache
-			\expandafter\def\csname @ha@prop@@scache@#2\endcsname{\pageref*{#1}}%
-		\fi%
-		% Let the cursor point to the current page
-		\expandafter\edef\csname @ha@prop@@cursor@#2\endcsname{\thepage}%
+	\expandafter\ifcsname @ha@prop@@labels@#2\endcsname%
+		% This is *not* the first occurrence
+		\expandafter\g@addto@macro\csname @ha@prop@@labels@#2\endcsname{,#1}%
+		% Use "pp." for the preamble when there are multiple occurrences
+		\expandafter\gdef\csname @ha@prop@@preamble@#2\endcsname{pp.~}%
+	\else%
+		% This is the first occurrence
+		\expandafter\gdef\csname @ha@prop@@labels@#2\endcsname{#1}%
 	\fi%
 }
 %
@@ -209,7 +305,9 @@
 		% Assign a unique number to the unnamed occurrence
 		\stepcounter{@ha@unlabeled@counter}%
 		% Call `\starred@hereapplies` with an opaque label
-		\edef\tmp{\noexpand\starred@labeled@hereapplies{#2:__appl\arabic{@ha@unlabeled@counter}__}{#2}}\tmp%
+		{\edef\tmp{\noexpand\starred@labeled@hereapplies{%
+			ha:#2-unnamed\the@ha@unlabeled@counter}{#2}%
+		}\tmp}%
 	\else%
 		% The macro has been called with two arguments
 		\starred@labeled@hereapplies{#1}{#2}%
@@ -232,7 +330,10 @@
 % accordingly, otherwise an opaque name will be assigned to it. This argument
 % may contain only what is legal in both `\label` and `\pageref`.
 %
-% The `ConceptName` argument may contain only letters and the "at" sign (`@`).
+% The `ConceptName` argument may contain only Latin letters and the "at" sign
+% (`@`). This string remains confined within the internal scope of the package
+% and does not create conflicts with possible macros or labels of the same
+% name.
 %
 % The starred version of this macro (`\hereapplies*`) does not invoke the
 % `\phantomsection` directive.
@@ -247,8 +348,12 @@
 % *****************************************************************************
 %
 % Print all the occurrences of a concept in the form "p. ..." or "pp. ..."
+% with page range support
 %
-% The `ConceptName` argument may contain only letters and the "at" sign (`@`).
+% The `ConceptName` argument may contain only Latin letters and the "at" sign
+% (`@`). This string remains confined within the internal scope of the package
+% and does not create conflicts with possible macros or labels of the same
+% name.
 %
 % The starred version of this macro (`\whereapplies*`) will use `\pageref*`
 % instead of `\pageref` for generating the page list.

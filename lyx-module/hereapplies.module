@@ -34,6 +34,9 @@ InsetLayout Flex:Here_applies
 	BgColor		lightgray
 	Argument 1
 		Decoration	Classic
+		Font
+			Color		blue
+		EndFont
 		LabelString	"Label"
 		MenuString	"Instance label"
 		Tooltip		"A string that will become the label of the instance (which can be referenced with \ref, \pageref, etc.)"
@@ -64,6 +67,9 @@ InsetLayout Flex:Here_applies*
 	BgColor		lightgray
 	Argument 1
 		Decoration	Classic
+		Font
+			Color		blue
+		EndFont
 		LabelString	"Label"
 		MenuString	"Instance label"
 		Tooltip		"A string that will become the label of the instance (which can be referenced with \ref, \pageref, etc.)"
@@ -81,7 +87,7 @@ InsetLayout Flex:Where_applies
 	EndFont
 	LabelFont
 		Family		Serif
-		Color		green
+		Color		purple
 		Size		Small
 	EndFont
 	LabelString	"Applications of"
@@ -104,7 +110,7 @@ InsetLayout Flex:Where_applies*
 	EndFont
 	LabelFont
 		Family		Serif
-		Color		green
+		Color		purple
 		Size		Small
 	EndFont
 	LabelString	"Applications of*"

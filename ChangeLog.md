@@ -2,6 +2,18 @@ Change Log
 ==========
 
 
+## 0.4.0 (2022-08-16)
+
+Changes:
+
+* The `\whereapplies` macro and its starred counterpart now support page ranges
+  and a more robust indexing (a partial rewrite of the code and the addition of
+  the `refcount` dependency were necessary)
+* The LyX module has been updated
+* Documentation
+* Examples
+
+
 ## 0.3.1 (2022-08-15)
 
 Changes:
