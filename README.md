@@ -22,15 +22,17 @@ the last one, by design, are missing in **Here Applies**.
 
 Instead, the package offers only two macros: `\hereapplies` and `\whereapplies`
 (plus their “starred” versions `\hereapplies*` and `\whereapplies*`). In both
-cases a “concept name” is passed as argument – and this can be any string
-invented in the moment, as long as it contains only letters.
+cases a “concept identifier” is passed as argument – and this can be any string
+invented in the moment, as long as it contains only letters (`\hereapplies`
+additionally supports more than one identifier in the form of a comma-separated
+list).
 
-Every time `\hereapplies` is invoked again on an identical string, the document
-is made aware that the same concept from previous invocations is occurring at
-that point. And so, every time the `\whereapplies` macro is invoked on that
-same string, all the occurrences of that concept within the entire document
-will be printed in the form of a linkable page number list (e.g. “pp. 1, 5,
-8–9, 14–20…”).
+Every time `\hereapplies` is invoked again on identical identifiers, the
+document is made aware that the same concepts from previous invocations are
+occurring in that point. And so, every time the `\whereapplies` macro is
+invoked on a known identifier, all the occurrences of the latter within the
+entire document will be printed in the form of a linkable page list (e.g. “pp.
+1, 5, 8–9, 14–20…”).
 
 As `\hereapplies` is designed to be invoked in the middle of a chapter or a
 section, and that location must be made linkable, the `\phantomsection` macro
@@ -38,7 +40,7 @@ is invoked by default before a label is added. To avoid calling
 `\phantomsection`, the “starred” macro `\hereapplies*` is available.
 
 Finally, like `\whereapplies` resembles a pluralizable version of `\pageref`,
-its “starred” version `\whereapplies*` resembles a pluralizable version of
+its “starred” version `\whereapplies*` will resemble a pluralizable version of
 `\pageref*`.
 
 If you use LyX, the package ships a LyX module as well (please check the
@@ -63,17 +65,11 @@ The following LaTeX manuscript
 
 \maketitle
 
-This is concept one. To find this concept applied, please see
-\whereapplies{conceptOne}.
+This is concept one. To find this concept applied, please
+see \whereapplies{conceptOne}.
 
-This is concept two. To find this concept applied, please see
-\whereapplies{conceptTwo}.\newpage
-
-\hereapplies{conceptOne}This is page \thepage. As you can see, ``concept
-one'' applies here.\newpage
-
-\hereapplies{conceptTwo}This is page \thepage. As you can see, ``concept
-two'' applies here.\newpage
+This is concept two. To find this concept applied, please
+see \whereapplies{conceptTwo}.\newpage
 
 \hereapplies{conceptOne}This is page \thepage. As you can see, ``concept
 one'' applies here.\newpage
@@ -81,8 +77,8 @@ one'' applies here.\newpage
 \hereapplies{conceptTwo}This is page \thepage. As you can see, ``concept
 two'' applies here.\newpage
 
-\hereapplies{conceptTwo}This is page \thepage. As you can see, ``concept
-two'' applies here.\newpage
+\hereapplies{conceptOne,conceptTwo}This is page \thepage. As you
+can see, both ``concept one'' and ``concept two'' apply here.\newpage
 
 \hereapplies{conceptTwo}This is page \thepage. As you can see, ``concept
 two'' applies here.\newpage
@@ -100,31 +96,35 @@ will generate [this document][1].
 A minimal tutorial
 ------------------
 
-### Macro `\hereapplies[Label]{ConceptName}`
+### Macro `\hereapplies[label]{identifiers}`
 
-The `\hereapplies` macro notifies the document that a particular concept
-applies to a particular point and adds a label to it.
+The `\hereapplies` macro notifies the document that one or more concepts apply
+to a particular point and adds a label to it.
 
 If the optional argument is passed the label created will be named accordingly,
 otherwise an opaque name will be assigned to it. This argument may contain only
-what is legal in both `\label` and `\pageref`.
+what is legal for `\pageref`.
 
-The `ConceptName` argument may contain only Latin letters and the “at” sign
-(`@`). This string remains confined within the internal scope of the package
-and does not create conflicts with possible macros or labels of the same name.
+The `identifiers` argument must be a comma-separated list of identifiers. Each
+of these may contain only Latin letters and the "at" sign (`@`). These strings
+remain confined within the internal scope of the package and do not create
+conflicts with possible macros or labels of the same names.
 
-The “starred” version of this macro (`\hereapplies*`) does not invoke the
+The “starred” version of this macro (`\hereapplies*`) will not invoke the
 `\phantomsection` directive.
 
 
-### Macro `\whereapplies{ConceptName}`
+### Macro `\whereapplies{identifier}`
 
-The `\whereapplies` macro prints all the occurrences of a concept, in the form
-“p. …” or “pp. …” (with page range support).
+The `\whereapplies` macro prints all the occurrences of an identifier, in the
+form “p. …” or “pp. …” (with page range support).
 
-The `ConceptName` argument may contain only Latin letters and the “at” sign
+The `identifier` argument may contain only Latin letters and the "at" sign
 (`@`). This string remains confined within the internal scope of the package
 and does not create conflicts with possible macros or labels of the same name.
+
+If the same `identifier` is not passed to `\hereapplies` at least once
+throughout the document, `\whereapplies` will print “**??**”.
 
 The “starred” version of this macro (`\whereapplies*`) will use `\pageref*`
 instead of `\pageref` for generating the page list.

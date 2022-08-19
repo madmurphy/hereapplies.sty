@@ -7,7 +7,7 @@
 %
 % https://github.com/madmurphy/hereapplies.sty
 %
-% Version 0.4.0
+% Version 0.5.0
 %
 % Copyright (C) 2022 madmurphy <madmurphy333@gmail.com>
 %
@@ -40,17 +40,11 @@
 %
 %     \maketitle
 %
-%     This is concept one. To find this concept applied, please see
-%     \whereapplies{conceptOne}.
+%     This is concept one. To find this concept applied, please
+%     see \whereapplies{conceptOne}.
 %
-%     This is concept two. To find this concept applied, please see
-%     \whereapplies{conceptTwo}.\newpage
-%
-%     \hereapplies{conceptOne}This is page \thepage. As you can see, ``concept
-%     one'' applies here.\newpage
-%
-%     \hereapplies{conceptTwo}This is page \thepage. As you can see, ``concept
-%     two'' applies here.\newpage
+%     This is concept two. To find this concept applied, please
+%     see \whereapplies{conceptTwo}.\newpage
 %
 %     \hereapplies{conceptOne}This is page \thepage. As you can see, ``concept
 %     one'' applies here.\newpage
@@ -58,8 +52,8 @@
 %     \hereapplies{conceptTwo}This is page \thepage. As you can see, ``concept
 %     two'' applies here.\newpage
 %
-%     \hereapplies{conceptTwo}This is page \thepage. As you can see, ``concept
-%     two'' applies here.\newpage
+%     \hereapplies{conceptOne,conceptTwo}This is page \thepage. As you
+%     can see, both ``concept one'' and ``concept two'' apply here.\newpage
 %
 %     \hereapplies{conceptTwo}This is page \thepage. As you can see, ``concept
 %     two'' applies here.\newpage
@@ -81,47 +75,43 @@
 %         ===================
 %
 %
-% Assign a unique number to each concept
-\newcounter{@ha@concept@counter}
-% Assign a unique number to each unnamed occurrence of a concept
+% Assign a unique number to each identifier
+\newcounter{@ha@identifier@counter}
+% Assign a unique number to each unnamed occurrence of an identifier
 \newcounter{@ha@unlabeled@counter}
 %
 %
-% Macro `\@ha@makeoccurrencelist{HyperrefMacro}{LabelList}`
+% Macro `\@ha@makeoccurrencelist{hypermacro}{labels}`
 % *****************************************************************************
 %
 % Generate the list of page numbers with page range support
 %
-% This macro is for internal purposes only. When invoked, it scans the list of
-% labels provided (`LabelList`) and checks which labels refer to duplicate page
-% numbers and which page numbers can be grouped together.
+% This macro is for internal purposes only. When invoked, it scans the
+% comma-separated list of labels provided (`labels`) and checks which labels
+% refer to duplicate page numbers and which page numbers can be grouped
+% together.
 %
-% The `HyperrefMacro` argument is the macro from the `hyperref` package that
-% will process the label name. This should be either `T@pageref` -- equivalent
-% to `\pageref` -- or `@pagerefstar` -- equivalent to `\pageref*`.
+% The `hypermacro` argument is the macro from the `hyperref` package that will
+% process the label name. This should be either `T@pageref` -- equivalent to
+% `\pageref` -- or `@pagerefstar` -- equivalent to `\pageref*`.
 %
-% The `ConceptName` argument may contain only Latin letters and the "at" sign
-% (`@`). This string remains confined within the internal scope of the package
-% and does not create conflicts with possible macros or labels of the same
-% name.
-%
-% The `LabelList` must be a comma-separated list of labels.
+% The `labels` must be a comma-separated list of labels.
 %
 \newcommand{\@ha@makeoccurrencelist}[2]{%
 	% Reset the current page number
 	\def\@ha@tmp@@currp{-1}%
 	% Reset the current range offset
 	\def\@ha@tmp@@prangeoffs{-1}%
-	% Iterate through the `LabelList` argument
+	% Iterate through the `labels` argument
 	\@for\@ha@tmp@@thislabel:=#2\do{%
 		% Store the page number associated with this label
 		\edef\@ha@tmp@@nextp{\getpagerefnumber{\@ha@tmp@@thislabel}}%
 		% Check that we are not on the same page as in the last iteration
 		\unless\ifnum\@ha@tmp@@currp=\@ha@tmp@@nextp%
 			% This is not the same page as in the last iteration
-			% Is this the first page in which this concept appears?
+			% Is this the first page in which this identifier appears?
 			\unless\ifnum\@ha@tmp@@currp=-1%
-				% This is not the first page in which this concept appears
+				% This is not the first page in which this identifier appears
 				% Does this page follow immediately the previous label's page?
 				\ifnum\numexpr\@ha@tmp@@currp+1=\@ha@tmp@@nextp%
 					% This page follows immediately the previous label's page
@@ -175,35 +165,36 @@
 }
 %
 %
-% Macro `\@ha@newconcept{ConceptName}`
+% Macro `\@ha@newidentifier{identifier}`
 % *****************************************************************************
 %
-% Initialize a new concept
+% Initialize a new identifier
 %
 % This macro is for internal purposes only. When invoked, it sets up the helper
-% macros, counters and auxiliary files needed for keeping track of a concept.
-% If the concept was already initialized the macro will be no op.
+% macros, counters and auxiliary files needed for keeping track of an
+% identifier. If the identifier was already initialized the macro will be no
+% op.
 %
-% The `ConceptName` argument may contain only Latin letters and the "at" sign
+% The `identifier` argument may contain only Latin letters and the "at" sign
 % (`@`). This string remains confined within the internal scope of the package
 % and does not create conflicts with possible macros or labels of the same
 % name.
 %
-\newcommand{\@ha@newconcept}[1]{%
-	% Was this concept already initialized?
-	\expandafter\ifx\csname @ha@prop@@count@#1\endcsname\relax%
-		% The concept was never initialized
+\newcommand{\@ha@newidentifier}[1]{%
+	% Was this identifier already initialized?
+	\unless\ifcsname @ha@prop@@count@#1\endcsname%
+		% The identifier was never initialized
 		% Set the output to "??" - it will be updated by the .haN file
 		\expandafter\gdef\csname @ha@prop@@uoutput@#1\endcsname{\textbf{??}}%
 		% Set the starred output to "??" - it will be updated by the .haN file
 		\expandafter\gdef\csname @ha@prop@@soutput@#1\endcsname{\textbf{??}}%
 		% Use "p." for the preamble when there is only one occurrence
 		\expandafter\gdef\csname @ha@prop@@preamble@#1\endcsname{p.~}%
-		% Increase the counter of concepts
-		\stepcounter{@ha@concept@counter}%
-		% Store the current value of the counter of concepts
+		% Increase the counter of identifiers
+		\stepcounter{@ha@identifier@counter}%
+		% Store the current value of the counter of identifiers
 		\expandafter\xdef\csname
-			@ha@prop@@count@#1\endcsname{\the@ha@concept@counter}%
+			@ha@prop@@count@#1\endcsname{\the@ha@identifier@counter}%
 		% Initialize the .haN file
 		% Previous versions had this line, which created unwanted whitespaces:
 		%\@starttoc{ha\csname @ha@prop@@count@#1\endcsname}%
@@ -212,7 +203,7 @@
 		% Store all the occurrences when the document reaches the end
 		\AtEndDocument{%
 			% Make sure that there are occurrences
-			\expandafter\ifcsname @ha@prop@@labels@#1\endcsname%
+			\ifcsname @ha@prop@@labels@#1\endcsname%
 				% There are occurrences
 				% Set the .haN file as output
 				\addtocontents{ha\csname @ha@prop@@count@#1\endcsname}{%
@@ -241,31 +232,32 @@
 }
 %
 %
-% Macro: `\@ha@getpropat{PropertyName}{ConceptName}`
+% Macro: `\@ha@getpropat{field}{identifier}`
 % *****************************************************************************
 %
-% Get the value of a concept's property
+% Get the value of an identifier's property
 %
 % This macro is for internal purposes (but nothing forbids invoking it
-% directly). If a concept was never initialized the macro will initialize it.
+% directly). If the identifier was never initialized the macro will initialize
+% it.
 %
-% Possible values for the `PropertyName` argument are: `count`, `labels`,
-% `preamble`, `soutput`, `uoutput`.
+% Possible values for the `field` argument are: `count`, `labels`, `preamble`,
+% `soutput`, `uoutput`.
 %
-% The `ConceptName` argument may contain only Latin letters and the "at" sign
+% The `identifier` argument may contain only Latin letters and the "at" sign
 % (`@`). This string remains confined within the internal scope of the package
 % and does not create conflicts with possible macros or labels of the same
 % name.
 %
 \newcommand{\@ha@getpropat}[2]{%
-	% Make sure that the concept is initialized
-	\@ha@newconcept{#2}%
-	% Print the concept's property
+	% Make sure that the identifier is initialized
+	\@ha@newidentifier{#2}%
+	% Print the identifier's property
 	\csname @ha@prop@@#1@#2\endcsname%
 }
 %
 %
-% Macro: `\starred@labeled@hereapplies{Label}{ConceptName}`
+% Macro: `\starred@labeled@hereapplies{label}{identifiers}`
 % *****************************************************************************
 %
 % Equivalent to `\hereapplies*`, but the two arguments are both mandatory
@@ -274,23 +266,30 @@
 % directly). See the documentation of `\hereapplies` for more information.
 %
 \newcommand{\starred@labeled@hereapplies}[2]{%
-	% Make sure that the concept has been initialized
-	\@ha@newconcept{#2}%
 	% Assign a label to this occurrence
 	\label{#1}%
-	\expandafter\ifcsname @ha@prop@@labels@#2\endcsname%
-		% This is *not* the first occurrence
-		\expandafter\g@addto@macro\csname @ha@prop@@labels@#2\endcsname{,#1}%
-		% Use "pp." for the preamble when there are multiple occurrences
-		\expandafter\gdef\csname @ha@prop@@preamble@#2\endcsname{pp.~}%
-	\else%
-		% This is the first occurrence
-		\expandafter\gdef\csname @ha@prop@@labels@#2\endcsname{#1}%
-	\fi%
+	% Iterate through the comma-separated list `identifiers`
+	\@for\@ha@tmp@@id:=#2\do{%
+		% Make sure that the identifier is initialized
+		{\edef\tmp{\noexpand\@ha@newidentifier{\@ha@tmp@@id}}\tmp}%
+		% Is this the first time this identifier is mentioned?
+		\ifcsname @ha@prop@@labels@\@ha@tmp@@id\endcsname%
+			% This is *not* the first time
+			\expandafter\g@addto@macro\csname
+				@ha@prop@@labels@\@ha@tmp@@id\endcsname{,#1}%
+			% Use "pp." for the preamble when there are multiple occurrences
+			\expandafter\gdef\csname
+				@ha@prop@@preamble@\@ha@tmp@@id\endcsname{pp.~}%
+		\else%
+			% This is the first time
+			\expandafter\gdef\csname
+				@ha@prop@@labels@\@ha@tmp@@id\endcsname{#1}%
+		\fi%
+	}%
 }
 %
 %
-% Macro: `\starred@hereapplies[Label]{ConceptName}`
+% Macro: `\starred@hereapplies[label]{identifiers}`
 % *****************************************************************************
 %
 % Equivalent to `\hereapplies*`
@@ -306,7 +305,7 @@
 		\stepcounter{@ha@unlabeled@counter}%
 		% Call `\starred@hereapplies` with an opaque label
 		{\edef\tmp{\noexpand\starred@labeled@hereapplies{%
-			ha:#2-unnamed\the@ha@unlabeled@counter}{#2}%
+			hereapplies:unnamed\the@ha@unlabeled@counter}{#2}%
 		}\tmp}%
 	\else%
 		% The macro has been called with two arguments
@@ -320,20 +319,20 @@
 %         ===================
 %
 %
-% Macro: `\hereapplies[Label]{ConceptName}`
+% Macro: `\hereapplies[label]{identifiers}`
 % *****************************************************************************
 %
-% Notify the document that a particular concept applies and create a label for
-% it
+% Notify the document that one or more identifiers apply to a particular point
+% and add a label to it
 %
 % If the optional argument is passed the label created will be named
 % accordingly, otherwise an opaque name will be assigned to it. This argument
-% may contain only what is legal in both `\label` and `\pageref`.
+% may contain only what is legal for `\pageref`.
 %
-% The `ConceptName` argument may contain only Latin letters and the "at" sign
-% (`@`). This string remains confined within the internal scope of the package
-% and does not create conflicts with possible macros or labels of the same
-% name.
+% The `identifiers` argument must be a comma-separated list of identifiers.
+% Each of these may contain only Latin letters and the "at" sign (`@`). These
+% strings remain confined within the internal scope of the package and do not
+% create conflicts with possible macros or labels of the same names.
 %
 % The starred version of this macro (`\hereapplies*`) does not invoke the
 % `\phantomsection` directive.
@@ -344,16 +343,19 @@
 }
 %
 %
-% Macro: `\whereapplies{ConceptName}`
+% Macro: `\whereapplies{identifier}`
 % *****************************************************************************
 %
-% Print all the occurrences of a concept in the form "p. ..." or "pp. ..."
+% Print all the occurrences of an identifier in the form "p. ..." or "pp. ..."
 % with page range support
 %
-% The `ConceptName` argument may contain only Latin letters and the "at" sign
-% (`@`). This string remains confined within the internal scope of the package
-% and does not create conflicts with possible macros or labels of the same
-% name.
+% The `identifier` argument may contain only Latin letters and the "at"
+% sign (`@`). This string remains confined within the internal scope of the
+% package and does not create conflicts with possible macros or labels of the
+% same name.
+%
+% If the same `identifier` is not passed to `\hereapplies` at least once
+% throughout the document, `\whereapplies` will print "??".
 %
 % The starred version of this macro (`\whereapplies*`) will use `\pageref*`
 % instead of `\pageref` for generating the page list.

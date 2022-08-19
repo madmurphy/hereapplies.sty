@@ -2,6 +2,16 @@ Change Log
 ==========
 
 
+## 0.5.0 (2022-08-19)
+
+Changes:
+
+* A macro expansion bug has been fixed
+* The `\hereapplies` macro now supports a comma-separated list of identifiers
+* Documentation
+* Examples
+
+
 ## 0.4.0 (2022-08-16)
 
 Changes:

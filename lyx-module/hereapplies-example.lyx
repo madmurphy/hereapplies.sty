@@ -219,7 +219,7 @@ concept two
 status open
 
 \begin_layout Plain Layout
-conceptOne
+conceptOne,conceptTwo
 \end_layout
 
 \end_inset
@@ -238,7 +238,7 @@ thepage
 \end_inset
 
 .
- As you can see, 
+ As you can see, both 
 \begin_inset Quotes eld
 \end_inset
 
@@ -246,38 +246,7 @@ concept one
 \begin_inset Quotes erd
 \end_inset
 
- applies here.
-\begin_inset Newpage newpage
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Flex Here applies
-status open
-
-\begin_layout Plain Layout
-conceptTwo
-\end_layout
-
-\end_inset
-
-This is page 
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-thepage
-\end_layout
-
-\end_inset
-
-.
- As you can see, 
+ and 
 \begin_inset Quotes eld
 \end_inset
 
@@ -285,46 +254,10 @@ concept two
 \begin_inset Quotes erd
 \end_inset
 
- applies here.
-\begin_inset Newpage newpage
-\end_inset
-
-
+ apply here.
 \end_layout
 
 \begin_layout Standard
-\begin_inset Flex Here applies
-status open
-
-\begin_layout Plain Layout
-conceptTwo
-\end_layout
-
-\end_inset
-
-This is page 
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-thepage
-\end_layout
-
-\end_inset
-
-.
- As you can see, 
-\begin_inset Quotes eld
-\end_inset
-
-concept two
-\begin_inset Quotes erd
-\end_inset
-
- applies here.
 \begin_inset Newpage newpage
 \end_inset
 

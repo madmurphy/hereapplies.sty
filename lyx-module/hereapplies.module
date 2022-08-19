@@ -39,7 +39,7 @@ InsetLayout Flex:Here_applies
 		EndFont
 		LabelString	"Label"
 		MenuString	"Instance label"
-		Tooltip		"A string that will become the label of the instance (which can be referenced with \ref, \pageref, etc.)"
+		Tooltip		"A string that will become the label for this point of the document (which can be referenced with \ref, \pageref, etc.)"
 		Mandatory	0
 	EndArgument
 End
@@ -72,7 +72,7 @@ InsetLayout Flex:Here_applies*
 		EndFont
 		LabelString	"Label"
 		MenuString	"Instance label"
-		Tooltip		"A string that will become the label of the instance (which can be referenced with \ref, \pageref, etc.)"
+		Tooltip		"A string that will become the label for this point of the document (which can be referenced with \ref, \pageref, etc.)"
 		Mandatory	0
 	EndArgument
 End
