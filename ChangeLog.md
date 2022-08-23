@@ -2,6 +2,20 @@ Change Log
 ==========
 
 
+## 0.6.0 (2022-08-23)
+
+Changes:
+
+* The `\whereapplies` macro now prints "and", instead of a comma, before the
+  last page
+* All translatable strings have been isolated into the four adjustable macros
+  `\hapage`, `\hapages`, `\hadelimiter` and `\halastdelimiter`
+* Code review (the `\hereapplies` macro now invokes `\detokenize` before
+  checking whether the optional argument was passed)
+* The LyX module has been updated
+* Documentation
+
+
 ## 0.5.0 (2022-08-19)
 
 Changes:

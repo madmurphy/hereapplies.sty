@@ -3,11 +3,12 @@
 %
 % hereapplies.sty
 %
-% A LaTeX package for cross-linking concepts to their applications
+% A LaTeX package for referencing groups of pages that share something in
+% common
 %
 % https://github.com/madmurphy/hereapplies.sty
 %
-% Version 0.5.0
+% Version 0.6.0
 %
 % Copyright (C) 2022 madmurphy <madmurphy333@gmail.com>
 %
@@ -65,9 +66,24 @@
 %     \end{document}
 %
 %
-\ProvidesPackage{hereapplies}
+\ProvidesPackage{hereapplies}[2022/08/23 Here Applies]
 \RequirePackage{hyperref}
 \RequirePackage{refcount}
+%
+%
+%
+%         TRANSLATABLE STRINGS
+%         ====================
+%
+%
+% The abbreviation of one single page
+\providecommand{\hapage}{p.\ }
+% The abbreviation of two or more pages
+\providecommand{\hapages}{pp.\ }
+% The delimiter between page numbers
+\providecommand{\hadelimiter}{,\ }
+% The delimiter before the last page number
+\providecommand{\halastdelimiter}{\ and\ }
 %
 %
 %
@@ -84,12 +100,12 @@
 % Macro `\@ha@makeoccurrencelist{hypermacro}{labels}`
 % *****************************************************************************
 %
-% Generate the list of page numbers with page range support
+% Generate the list of page numbers (with page range support)
 %
-% This macro is for internal purposes only. When invoked, it scans the
-% comma-separated list of labels provided (`labels`) and checks which labels
-% refer to duplicate page numbers and which page numbers can be grouped
-% together.
+% This macro is for internal purposes. When invoked, it scans the
+% comma-separated list of labels provided (`labels`), checks which labels refer
+% to duplicate page numbers and which page numbers can be grouped together, and
+% finally prints a list.
 %
 % The `hypermacro` argument is the macro from the `hyperref` package that will
 % process the label name. This should be either `T@pageref` -- equivalent to
@@ -102,6 +118,10 @@
 	\def\@ha@tmp@@currp{-1}%
 	% Reset the current range offset
 	\def\@ha@tmp@@prangeoffs{-1}%
+	% Ensure no comma before the first page number
+	\def\@ha@tmp@@psep{}%
+	% Ensure no text before the last page number if it is also the first one
+	\def\@ha@tmp@@lastpsep{}%
 	% Iterate through the `labels` argument
 	\@for\@ha@tmp@@thislabel:=#2\do{%
 		% Store the page number associated with this label
@@ -128,16 +148,22 @@
 					% Was the previous page part of a contiguous range?
 					\ifnum\@ha@tmp@@prangeoffs=-1%
 						% The previous page was a standalone page
-						% Print "[p], "
-						{\csname #1\endcsname{\@ha@tmp@@currlbl}, }%
+						% Print "[, ]<p>"
+						{\@ha@tmp@@psep\csname
+							#1\endcsname{\@ha@tmp@@currlbl}}%
 					\else%
 						% The previous page was part of a contiguous range
-						% Print "[p--q], "
-						{\csname #1\endcsname{\@ha@tmp@@currrangelbl}--\csname
-							#1\endcsname{\@ha@tmp@@currlbl}, }%
+						% Print "[, ]<p--q>"
+						{\@ha@tmp@@psep\csname
+							#1\endcsname{\@ha@tmp@@currrangelbl}--\csname
+							#1\endcsname{\@ha@tmp@@currlbl}}%
 						% Reset the current range offset
 						\def\@ha@tmp@@prangeoffs{-1}%
 					\fi%
+					% Ensure a comma before the next page number
+					\let\@ha@tmp@@psep\hadelimiter%
+					% Ensure " and " before the last page number
+					\let\@ha@tmp@@lastpsep\halastdelimiter%
 				\fi%
 			\fi%
 			% Prepare the next page number
@@ -153,12 +179,13 @@
 		% Was the previous page part of a contiguous range?
 		\ifnum\@ha@tmp@@prangeoffs=-1%
 			% The previous page was a standalone page
-			% Print "[p], "
-			{\csname #1\endcsname{\@ha@tmp@@currlbl}}%
+			% Print "[ and ]<p>"
+			{\@ha@tmp@@lastpsep\csname #1\endcsname{\@ha@tmp@@currlbl}}%
 		\else%
 			% The previous page was part of a contiguous range
-			% Print "[p--q], "
-			{\csname #1\endcsname{\@ha@tmp@@currrangelbl}--\csname
+			% Print "[ and ]<p--q>"
+			{\@ha@tmp@@lastpsep\csname
+				#1\endcsname{\@ha@tmp@@currrangelbl}--\csname
 				#1\endcsname{\@ha@tmp@@currlbl}}%
 		\fi%
 	\fi%
@@ -176,9 +203,9 @@
 % op.
 %
 % The `identifier` argument may contain only Latin letters and the "at" sign
-% (`@`). This string remains confined within the internal scope of the package
-% and does not create conflicts with possible macros or labels of the same
-% name.
+% (`/^[A-Za-z@]+$/`). This string remains confined within the internal scope of
+% the package and does not create conflicts with possible macros or labels of
+% the same name.
 %
 \newcommand{\@ha@newidentifier}[1]{%
 	% Was this identifier already initialized?
@@ -189,7 +216,7 @@
 		% Set the starred output to "??" - it will be updated by the .haN file
 		\expandafter\gdef\csname @ha@prop@@soutput@#1\endcsname{\textbf{??}}%
 		% Use "p." for the preamble when there is only one occurrence
-		\expandafter\gdef\csname @ha@prop@@preamble@#1\endcsname{p.~}%
+		\global\expandafter\let\csname @ha@prop@@preamble@#1\endcsname\hapage%
 		% Increase the counter of identifiers
 		\stepcounter{@ha@identifier@counter}%
 		% Store the current value of the counter of identifiers
@@ -245,9 +272,9 @@
 % `soutput`, `uoutput`.
 %
 % The `identifier` argument may contain only Latin letters and the "at" sign
-% (`@`). This string remains confined within the internal scope of the package
-% and does not create conflicts with possible macros or labels of the same
-% name.
+% (`/^[A-Za-z@]+$/`). This string remains confined within the internal scope of
+% the package and does not create conflicts with possible macros or labels of
+% the same name.
 %
 \newcommand{\@ha@getpropat}[2]{%
 	% Make sure that the identifier is initialized
@@ -274,14 +301,16 @@
 		{\edef\tmp{\noexpand\@ha@newidentifier{\@ha@tmp@@id}}\tmp}%
 		% Is this the first time this identifier is mentioned?
 		\ifcsname @ha@prop@@labels@\@ha@tmp@@id\endcsname%
-			% This is *not* the first time
+			% This is *not* the first time this identifier is mentioned
+			% Add this label to the list
 			\expandafter\g@addto@macro\csname
 				@ha@prop@@labels@\@ha@tmp@@id\endcsname{,#1}%
 			% Use "pp." for the preamble when there are multiple occurrences
-			\expandafter\gdef\csname
-				@ha@prop@@preamble@\@ha@tmp@@id\endcsname{pp.~}%
+			\global\expandafter\let\csname
+				@ha@prop@@preamble@\@ha@tmp@@id\endcsname\hapages%
 		\else%
-			% This is the first time
+			% This is the first time this identifier is mentioned
+			% Set up the list with this label as value
 			\expandafter\gdef\csname
 				@ha@prop@@labels@\@ha@tmp@@id\endcsname{#1}%
 		\fi%
@@ -299,7 +328,7 @@
 %
 \newcommand{\starred@hereapplies}[2][]{%
 	% Check whether the macro has been called with one or two arguments
-	\ifx&#1&%
+	\if\relax\detokenize{#1}\relax%
 		% The macro has been called with only one argument
 		% Assign a unique number to the unnamed occurrence
 		\stepcounter{@ha@unlabeled@counter}%
@@ -309,6 +338,7 @@
 		}\tmp}%
 	\else%
 		% The macro has been called with two arguments
+		% Call `\starred@labeled@hereapplies` with the same arguments
 		\starred@labeled@hereapplies{#1}{#2}%
 	\fi%
 }
@@ -331,8 +361,8 @@
 %
 % The `identifiers` argument must be a comma-separated list of identifiers.
 % Each of these may contain only Latin letters and the "at" sign (`@`). These
-% strings remain confined within the internal scope of the package and do not
-% create conflicts with possible macros or labels of the same names.
+% strings will remain confined within the internal scope of the package and
+% will not create conflicts with possible macros or labels of the same names.
 %
 % The starred version of this macro (`\hereapplies*`) does not invoke the
 % `\phantomsection` directive.
@@ -350,8 +380,8 @@
 % with page range support
 %
 % The `identifier` argument may contain only Latin letters and the "at"
-% sign (`@`). This string remains confined within the internal scope of the
-% package and does not create conflicts with possible macros or labels of the
+% sign (`@`). This string will remain confined within the internal scope of the
+% package and will not create conflicts with possible macros or labels of the
 % same name.
 %
 % If the same `identifier` is not passed to `\hereapplies` at least once
@@ -363,5 +393,5 @@
 \newcommand{\whereapplies}{%
 	% Check if a star is present in the invocation of the command
 	\@ifstar{\@ha@getpropat{soutput}}{\@ha@getpropat{uoutput}}%
-}
+}%
 

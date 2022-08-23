@@ -1,6 +1,6 @@
 #\DeclareLyXModule[hereapplies.sty]{Here Applies}
 #DescriptionBegin
-#A module for cross-linking concepts to their applications.
+#A module for for referencing groups of pages that share something in common.
 #See the hereapplies.sty LaTeX package for more information.
 #DescriptionEnd
 #Authors: madmurphy
@@ -15,32 +15,37 @@ InsetLayout Flex:Here_applies
 	LyXType		custom
 	Decoration	Classic
 	Font
-		Family		Typewriter
-		Color		black
-		Size		Small
+		Family			Typewriter
+		Color			black
+		Size			Small
 	EndFont
 	LabelFont
-		Family		Serif
-		Color		teal
-		Size		Small
+		Family			Serif
+		Color			teal
+		Size			Small
 	EndFont
-	LabelString	"Here applies"
-	LatexType	command
-	LatexName	hereapplies
-	Requires	hereapplies
-	ForcePlain	1
-	MultiPar	0
-	NoInsetLayout	1
-	BgColor		lightgray
+	LabelString		"Here applies"
+	LatexType		command
+	LatexName		hereapplies
+	Requires		hereapplies
+	NoInsetLayout		true
+	MultiPar		false
+	CustomPars		false
+	ForcePlain		true
+	PassThru		true
+	ParbreakIsNewline	true
+	FreeSpacing		false
+	ForceLTR		true
+	BgColor			lightgray
 	Argument 1
-		Decoration	Classic
+		Decoration		Classic
 		Font
-			Color		blue
+			Color			blue
 		EndFont
-		LabelString	"Label"
-		MenuString	"Instance label"
-		Tooltip		"A string that will become the label for this point of the document (which can be referenced with \ref, \pageref, etc.)"
-		Mandatory	0
+		LabelString		"Label"
+		MenuString		"Name of the label"
+		Tooltip			"A string that will become the label for this point of the document (which can be referenced with \ref, \pageref, etc.)"
+		Mandatory		0
 	EndArgument
 End
 
@@ -48,78 +53,93 @@ InsetLayout Flex:Here_applies*
 	LyXType		custom
 	Decoration	Classic
 	Font
-		Family		Typewriter
-		Color		black
-		Size		Small
+		Family			Typewriter
+		Color			black
+		Size			Small
 	EndFont
 	LabelFont
-		Family		Serif
-		Color		teal
-		Size		Small
+		Family			Serif
+		Color			teal
+		Size			Small
 	EndFont
-	LabelString	"Here applies*"
-	LatexType	command
-	LatexName	hereapplies*
-	Requires	hereapplies
-	ForcePlain	1
-	MultiPar	0
-	NoInsetLayout	1
-	BgColor		lightgray
+	LabelString		"Here applies*"
+	LatexType		command
+	LatexName		hereapplies*
+	Requires		hereapplies
+	NoInsetLayout		true
+	MultiPar		false
+	CustomPars		false
+	ForcePlain		true
+	PassThru		true
+	ParbreakIsNewline	true
+	FreeSpacing		false
+	ForceLTR		true
+	BgColor			lightgray
 	Argument 1
-		Decoration	Classic
+		Decoration		Classic
 		Font
-			Color		blue
+			Color			blue
 		EndFont
-		LabelString	"Label"
-		MenuString	"Instance label"
-		Tooltip		"A string that will become the label for this point of the document (which can be referenced with \ref, \pageref, etc.)"
-		Mandatory	0
+		LabelString		"Label"
+		MenuString		"Name of the label"
+		Tooltip			"A string that will become the label for this point of the document (which can be referenced with \ref, \pageref, etc.)"
+		Mandatory		0
 	EndArgument
 End
 
 InsetLayout Flex:Where_applies
-	LyXType		custom
-	Decoration	Classic
+	LyXType			custom
+	Decoration		Classic
 	Font
-		Family		Typewriter
-		Color		black
-		Size		Small
+		Family			Typewriter
+		Color			black
+		Size			Small
 	EndFont
 	LabelFont
-		Family		Serif
-		Color		purple
-		Size		Small
+		Family			Serif
+		Color			purple
+		Size			Small
 	EndFont
-	LabelString	"Applications of"
-	LatexType	command
-	LatexName	whereapplies
-	Requires	hereapplies
-	ForcePlain	1
-	MultiPar	0
-	NoInsetLayout	1
-	BgColor		lightgray
+	LabelString		"Applications of"
+	LatexType		command
+	LatexName		whereapplies
+	Requires		hereapplies
+	NoInsetLayout		true
+	MultiPar		false
+	CustomPars		false
+	ForcePlain		true
+	PassThru		true
+	ParbreakIsNewline	true
+	FreeSpacing		false
+	ForceLTR		true
+	BgColor			lightgray
 End
 
 InsetLayout Flex:Where_applies*
-	LyXType		custom
-	Decoration	Classic
+	LyXType			custom
+	Decoration		Classic
 	Font
-		Family		Typewriter
-		Color		black
-		Size		Small
+		Family			Typewriter
+		Color			black
+		Size			Small
 	EndFont
 	LabelFont
-		Family		Serif
-		Color		purple
-		Size		Small
+		Family			Serif
+		Color			purple
+		Size			Small
 	EndFont
-	LabelString	"Applications of*"
-	LatexType	command
-	LatexName	whereapplies*
-	Requires	hereapplies
-	ForcePlain	1
-	MultiPar	0
-	NoInsetLayout	1
-	BgColor		lightgray
+	LabelString		"Applications of*"
+	LatexType		command
+	LatexName		whereapplies*
+	Requires		hereapplies
+	NoInsetLayout		true
+	MultiPar		false
+	CustomPars		false
+	ForcePlain		true
+	PassThru		true
+	ParbreakIsNewline	true
+	FreeSpacing		false
+	ForceLTR		true
+	BgColor			lightgray
 End
 
