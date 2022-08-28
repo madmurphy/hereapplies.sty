@@ -106,6 +106,7 @@ This is concept one.
 status open
 
 \begin_layout Plain Layout
+
 conceptOne
 \end_layout
 
@@ -121,6 +122,7 @@ This is concept two.
 status open
 
 \begin_layout Plain Layout
+
 conceptTwo
 \end_layout
 
@@ -141,12 +143,13 @@ conceptTwo
 status open
 
 \begin_layout Plain Layout
+
 conceptOne
 \end_layout
 
 \end_inset
 
-This is page 
+ This is page 
 \begin_inset ERT
 status collapsed
 
@@ -180,12 +183,13 @@ concept one
 status open
 
 \begin_layout Plain Layout
+
 conceptTwo
 \end_layout
 
 \end_inset
 
-This is page 
+ This is page 
 \begin_inset ERT
 status collapsed
 
@@ -219,12 +223,13 @@ concept two
 status open
 
 \begin_layout Plain Layout
-conceptOne,conceptTwo
+
+conceptOne, conceptTwo
 \end_layout
 
 \end_inset
 
-This is page 
+ This is page 
 \begin_inset ERT
 status collapsed
 
@@ -269,12 +274,13 @@ concept two
 status open
 
 \begin_layout Plain Layout
+
 conceptTwo
 \end_layout
 
 \end_inset
 
-This is page 
+ This is page 
 \begin_inset ERT
 status collapsed
 
@@ -308,10 +314,12 @@ concept two
 status open
 
 \begin_layout Plain Layout
+
 \begin_inset Argument 1
 status open
 
 \begin_layout Plain Layout
+
 myref
 \end_layout
 
@@ -322,7 +330,7 @@ conceptOne
 
 \end_inset
 
-This is page 
+ This is page 
 \begin_inset ERT
 status collapsed
 

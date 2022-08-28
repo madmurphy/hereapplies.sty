@@ -7,28 +7,28 @@ A LaTeX package for referencing groups of pages that share something in common
 Overview
 --------
 
-**Here Applies** is a LaTeX package that allows to create groups of labels and
+**Here Applies** is a LaTeX package that allows to collect groups of labels and
 reference them altogether. It can be used for creating informal glossaries that
 cross-link concepts to their applications, or simply mentioning multiple pages
 that share something in common.
 
-The package offers two macros: `\hereapplies` and `\whereapplies` (plus their
+The package offers two commands: `\hereapplies` and `\whereapplies` (plus their
 “starred” versions `\hereapplies*` and `\whereapplies*`). In both cases an
 identifier is passed as argument – and this can be any string invented in the
-moment, as long as it contains only letters (`\hereapplies` additionally
-supports more than one identifier in the form of a comma-separated list).
+moment (`\hereapplies` additionally supports more than one identifier in the
+form of a comma-separated list).
 
 Every time `\hereapplies` is invoked with known identifiers, the document is
 made aware that the place shares some kind of connection with other places in
 which the same identifiers were used. And so, every time the `\whereapplies`
-macro is invoked with a known identifier, all the occurrences of the latter
+command is invoked with a known identifier, all the occurrences of the latter
 within the entire document will be printed in the form of a linkable page list
 (e.g. “pp. 1, 5, 8–9, 14–20…”).
 
 As `\hereapplies` is designed to be invoked in the middle of a chapter or a
-section, and that location must be made linkable, the `\phantomsection` macro
-is invoked by default before a label is added. To avoid calling
-`\phantomsection`, the “starred” macro `\hereapplies*` is available.
+section and that location must be made linkable, the `\phantomsection`
+directive is invoked by default before a label is added. To avoid calling
+`\phantomsection`, the “starred” command `\hereapplies*` is available.
 
 Finally, like `\whereapplies` resembles a pluralizable version of `\pageref`,
 its “starred” version `\whereapplies*` will resemble a pluralizable version of
@@ -62,19 +62,19 @@ see \whereapplies{conceptOne}.
 This is concept two. To find this concept applied, please
 see \whereapplies{conceptTwo}.\newpage
 
-\hereapplies{conceptOne}This is page \thepage. As you can see, ``concept
-one'' applies here.\newpage
+\hereapplies{conceptOne} This is page \thepage. As you can see,
+``concept one'' applies here.\newpage
 
-\hereapplies{conceptTwo}This is page \thepage. As you can see, ``concept
-two'' applies here.\newpage
+\hereapplies{conceptTwo} This is page \thepage. As you can see,
+``concept two'' applies here.\newpage
 
-\hereapplies{conceptOne,conceptTwo}This is page \thepage. As you
+\hereapplies{conceptOne, conceptTwo} This is page \thepage. As you
 can see, both ``concept one'' and ``concept two'' apply here.\newpage
 
-\hereapplies{conceptTwo}This is page \thepage. As you can see, ``concept
-two'' applies here.\newpage
+\hereapplies{conceptTwo} This is page \thepage. As you can see,
+``concept two'' applies here.\newpage
 
-\hereapplies[myref]{conceptOne}This is page \thepage. As you can
+\hereapplies[myref]{conceptOne} This is page \thepage. As you can
 see, ``concept one'' applies here. This point in the document is
 labeled \texttt{myref}.
 
@@ -87,38 +87,44 @@ will generate [this document][1].
 A minimal tutorial
 ------------------
 
-### Macro `\hereapplies[label]{identifiers}`
+### Command `\hereapplies[label]{identifiers}`
 
-The `\hereapplies` macro notifies the document that one or more identifiers
+The `\hereapplies` command notifies the document that one or more identifiers
 apply to a particular point and adds a label to it.
 
 If the optional argument is passed the label created will be named accordingly,
-otherwise an opaque name will be assigned to it. This argument may contain only
-what is legal for `\pageref`.
+otherwise an opaque name will be chosen. This argument may contain only what is
+legal for `\pageref`.
 
-The `identifiers` argument must be a comma-separated list of identifiers. Each
-of these may contain only Latin letters and the "at" sign (`/^[A-Za-z@]+$/`).
-These strings will remain confined within the internal scope of the package and
-will not create conflicts with possible macros or labels of the same names.
+The `identifiers` argument must be a comma-separated list of identifiers
+(leading and trailing spaces around each member will be ignored). Each of these
+strings will remain confined within the internal scope of the package and will
+not create conflicts with possible macros or labels of the same names.
 
-The “starred” version of this macro (`\hereapplies*`) will not invoke the
-`\phantomsection` directive.
+After storing some internal values, `\hereapplies` will expand exactly to
+
+``` tex
+\phantomsection
+\label{...}
+```
+
+Its “starred” version (`\hereapplies*`) will not invoke the `\phantomsection`
+directive.
 
 
-### Macro `\whereapplies{identifier}`
+### Command `\whereapplies{identifier}`
 
-The `\whereapplies` macro prints all the occurrences of an identifier, in the
+The `\whereapplies` command prints all the occurrences of an identifier, in the
 form “p. …” or “pp. …” (with page range support).
 
-The `identifier` argument may contain only Latin letters and the "at" sign
-(`/^[A-Za-z@]+$/`). This string will remain confined within the internal scope
-of the package and will not create conflicts with possible macros or labels of
-the same name.
+The `identifier` argument will remain confined within the internal scope of the
+package and will not create conflicts with possible commands or labels of the
+same name. Leading and trailing spaces around this string will be ignored.
 
 If the same `identifier` is not passed to `\hereapplies` at least once
 throughout the document, `\whereapplies` will print “**??**”.
 
-The “starred” version of this macro (`\whereapplies*`) will use `\pageref*`
+The “starred” version of this command (`\whereapplies*`) will use `\pageref*`
 instead of `\pageref` for generating the page list.
 
 
@@ -140,7 +146,7 @@ For example, writing at the beginning of a document
 % English: `\ and\ `
 \gdef\halastdelimiter{\ und\ }
 % English: `,\ ` (exactly like in German -- leave it)
-% \gdef\hadelimiter{,\ }
+%\gdef\hadelimiter{,\ }
 ```
 
 will translate “pp. 2, 4 and 6” into “S. 2, 4 und 6”.

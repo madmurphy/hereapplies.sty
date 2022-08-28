@@ -2,6 +2,18 @@ Change Log
 ==========
 
 
+## 0.7.0 (2022-08-29)
+
+Changes:
+
+* All restrictions have been lifted concerning the characters that are allowed
+  in the identifiers passed to `\hereapplies` and `\whereapplies`; leading and
+  trailing spaces from now on will be trimmed
+* I/O operations now rely on one auxiliary file only
+* Code review
+* Documentation
+
+
 ## 0.6.0 (2022-08-23)
 
 Changes:
