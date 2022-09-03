@@ -1,4 +1,4 @@
-%  -*- Mode: latex; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*-
+% -*- Mode: latex; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*-
 %
 %
 % hereapplies.sty
@@ -8,7 +8,7 @@
 %
 % https://github.com/madmurphy/hereapplies.sty
 %
-% Version 0.7.0
+% Version 0.8.0
 %
 % Copyright (C) 2022 madmurphy <madmurphy333@gmail.com>
 %
@@ -66,7 +66,7 @@
 %     \end{document}
 %
 %
-\ProvidesPackage{hereapplies}[2022/08/29 Here Applies]
+\ProvidesPackage{hereapplies}[2022/09/03 Here Applies]
 \RequirePackage{hyperref}
 \RequirePackage{refcount}
 %
@@ -101,7 +101,7 @@
 % This macro is mainly for internal purposes (but nothing forbids invoking it
 % directly). When invoked it checks whether a comma is present in `text to
 % check`, then expands to `if yes` or `if no` accordingly.
-
+%
 % Please do not put curly brackets around the text to check. The comma at the
 % end of the text is mandatory.
 %
@@ -350,16 +350,18 @@
 % other packages, if needed.
 %
 %
-% Macro: `\starred@labeled@hereapplies{label}{identifiers}`
+% Macro: `\starred@nochecks@hereapplies{label}{identifiers}`
 % *****************************************************************************
 %
-% Identical to `\hereapplies*`, but the two arguments are both mandatory
+% Similar to `\hereapplies*`, but without checks and with two mandatory
+% arguments
 %
 % This macro is mainly for internal purposes (but nothing forbids invoking it
-% directly). See the documentation of `\hereapplies` for more information.
+% directly). Here the two arguments are both mandatory and there will be no
+% checks that first argument does not contain a comma. See the documentation of
+% `\hereapplies` for more information.
 %
-\newcommand*{\starred@labeled@hereapplies}[2]{%
-    \begingroup%
+\newcommand*{\starred@nochecks@hereapplies}[2]{%
     % Assign a label to this occurrence
     \label{#1}%
     % Iterate through the comma-separated list `identifiers`
@@ -384,7 +386,8 @@
                 @ha@iter@@labels@\@ha@tmp@@id\endcsname{#1}%
         \fi%
     }%
-    \endgroup%
+    % Clean the environment
+    \let\@ha@tmp@@id\undefined%
 }
 %
 %
@@ -402,15 +405,23 @@
         % The macro has been called with only one argument
         % Assign a unique number to the unnamed occurrence
         \stepcounter{@ha@unlabeled@counter}%
-        % Call `\starred@hereapplies` with an opaque label
-        {\edef\@ha@tmp@@mcall{\noexpand\starred@labeled@hereapplies{%
-            hereapplies:unnamed\the@ha@unlabeled@counter}{#2}%
-        }\@ha@tmp@@mcall}%
+        % Create an opaque label
+        \edef\@ha@tmp@@lbl{hereapplies:unnamed\the@ha@unlabeled@counter}%
     \else%
         % The macro has been called with two arguments
-        % Call `\starred@labeled@hereapplies` with the same arguments
-        \starred@labeled@hereapplies{#1}{#2}%
+        % Expand the first argument for checking properly
+        \edef\@ha@tmp@@lbl{#1}%
+        % Make sure that there are no commas in the `label` argument
+        \expandafter\@ha@ifcomma\@ha@tmp@@lbl,\@then{%
+            \PackageError{hereapplies}{Comma detected in "\@ha@tmp@@lbl"}{%
+                It is possible to assign only one single label.%
+            }%
+        }{}%
     \fi%
+    % Call `\starred@nochecks@hereapplies`
+    \expandafter\starred@nochecks@hereapplies\expandafter{\@ha@tmp@@lbl}{#2}%
+    % Clean the environment
+    \let\@ha@tmp@@lbl\undefined%
 }
 %
 %
@@ -431,12 +442,11 @@
 % same name. Leading and trailing spaces around this string will be ignored.
 %
 \newcommand*{\get@hainfo}[2][labels]{%
-    \begingroup%
     % Trim leading and trailing spaces from the identifier
     \edef\@ha@tmp@@id{\ha@trim{#2}}%
     % Make sure that there are no commas
     \expandafter\@ha@ifcomma\@ha@tmp@@id,\@then{%
-        \PackageError{hereapplies}{Comma detected in "#2"}{%
+        \PackageError{hereapplies}{Comma detected in "\@ha@tmp@@id"}{%
             It is possible to query only one single identifier at a time.%
         }%
     }{}%
@@ -444,7 +454,8 @@
     \expandafter\@ha@newidentifier\expandafter{\@ha@tmp@@id}%
     % Print the identifier's property
     \csname @ha@prop@@#1@\@ha@tmp@@id\endcsname%
-    \endgroup%
+    % Clean the environment
+    \let\@ha@tmp@@id\undefined%
 }
 %
 %

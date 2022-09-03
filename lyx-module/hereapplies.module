@@ -1,9 +1,10 @@
 #\DeclareLyXModule[hereapplies.sty]{Here Applies}
+#\DeclareCategory{Label and References}
 #DescriptionBegin
 #A module for for referencing groups of pages that share something in common.
 #See the hereapplies.sty LaTeX package for more information.
 #DescriptionEnd
-#Authors: madmurphy
+#Author: madmurphy
 
 Format 66
 
@@ -11,9 +12,9 @@ AddToPreamble
 	\usepackage{hereapplies}
 EndPreamble
 
-InsetLayout Flex:Here_applies
-	LyXType		custom
-	Decoration	Classic
+InsetLayout "Flex:Here applies"
+	LyXType			custom
+	Decoration		Classic
 	Font
 		Family			Typewriter
 		Color			black
@@ -32,7 +33,7 @@ InsetLayout Flex:Here_applies
 	MultiPar		false
 	CustomPars		false
 	ForcePlain		true
-	PassThru		true
+	PassThru		false
 	ParbreakIsNewline	true
 	FreeSpacing		false
 	ForceLTR		true
@@ -49,9 +50,9 @@ InsetLayout Flex:Here_applies
 	EndArgument
 End
 
-InsetLayout Flex:Here_applies*
-	LyXType		custom
-	Decoration	Classic
+InsetLayout "Flex:Here applies*"
+	LyXType			custom
+	Decoration		Classic
 	Font
 		Family			Typewriter
 		Color			black
@@ -70,7 +71,7 @@ InsetLayout Flex:Here_applies*
 	MultiPar		false
 	CustomPars		false
 	ForcePlain		true
-	PassThru		true
+	PassThru		false
 	ParbreakIsNewline	true
 	FreeSpacing		false
 	ForceLTR		true
@@ -87,7 +88,7 @@ InsetLayout Flex:Here_applies*
 	EndArgument
 End
 
-InsetLayout Flex:Where_applies
+InsetLayout "Flex:Where applies"
 	LyXType			custom
 	Decoration		Classic
 	Font
@@ -100,7 +101,7 @@ InsetLayout Flex:Where_applies
 		Color			purple
 		Size			Small
 	EndFont
-	LabelString		"Applications of"
+	LabelString		"Where applies"
 	LatexType		command
 	LatexName		whereapplies
 	Requires		hereapplies
@@ -108,14 +109,14 @@ InsetLayout Flex:Where_applies
 	MultiPar		false
 	CustomPars		false
 	ForcePlain		true
-	PassThru		true
+	PassThru		false
 	ParbreakIsNewline	true
 	FreeSpacing		false
 	ForceLTR		true
 	BgColor			lightgray
 End
 
-InsetLayout Flex:Where_applies*
+InsetLayout "Flex:Where applies*"
 	LyXType			custom
 	Decoration		Classic
 	Font
@@ -128,7 +129,7 @@ InsetLayout Flex:Where_applies*
 		Color			purple
 		Size			Small
 	EndFont
-	LabelString		"Applications of*"
+	LabelString		"Where applies*"
 	LatexType		command
 	LatexName		whereapplies*
 	Requires		hereapplies
@@ -136,7 +137,7 @@ InsetLayout Flex:Where_applies*
 	MultiPar		false
 	CustomPars		false
 	ForcePlain		true
-	PassThru		true
+	PassThru		false
 	ParbreakIsNewline	true
 	FreeSpacing		false
 	ForceLTR		true

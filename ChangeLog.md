@@ -2,6 +2,17 @@ Change Log
 ==========
 
 
+## 0.8.0 (2022-09-03)
+
+Changes:
+
+* The package now checks that the optional argument of the `\hereapplies` macro
+  does not contain commas
+* The LyX module has been updated
+* The documentation is now available in `.lyx`, `.tex` and `.pdf` format
+* Code review
+
+
 ## 0.7.0 (2022-08-29)
 
 Changes:
