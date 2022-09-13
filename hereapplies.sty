@@ -8,7 +8,7 @@
 %
 % https://github.com/madmurphy/hereapplies.sty
 %
-% Version 0.8.0
+% Version 1.0.0
 %
 % Copyright (C) 2022 madmurphy <madmurphy333@gmail.com>
 %
@@ -66,7 +66,7 @@
 %     \end{document}
 %
 %
-\ProvidesPackage{hereapplies}[2022/09/03 Here Applies]
+\ProvidesPackage{hereapplies}[2022/09/13 Here Applies]
 \RequirePackage{hyperref}
 \RequirePackage{refcount}
 %
@@ -422,6 +422,8 @@
     \expandafter\starred@nochecks@hereapplies\expandafter{\@ha@tmp@@lbl}{#2}%
     % Clean the environment
     \let\@ha@tmp@@lbl\undefined%
+    % Ignore the spaces that might follow
+    \ignorespaces%
 }
 %
 %

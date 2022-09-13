@@ -21,6 +21,7 @@
 \makeatletter
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 \usepackage{doc}
+\usepackage{upquote}
 
 \AtBeginDocument{%
 	% LyX should add automatically `\usepackage{listings}` to the preamble...
@@ -138,9 +139,13 @@ possible macros or labels of the same names.
 After storing some internal values, \texttt{\textbackslash hereapplies}
 will expand exactly to
 
+\smallskip{}
+
 \begin{lstlisting}[language=TeX,numbers=none]
 \phantomsection\label{...}
 \end{lstlisting}
+
+\smallskip{}
 
 Its ``starred'' version (\texttt{\textbackslash hereapplies{*}})
 will not invoke the \texttt{\textbackslash phantomsection} directive.

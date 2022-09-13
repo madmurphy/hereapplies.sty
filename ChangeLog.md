@@ -2,6 +2,17 @@ Change Log
 ==========
 
 
+## 1.0.0 (2022-09-13)
+
+Changes:
+
+* The `\ignorespaces` directive has been added at the end of the `\hereapplies`
+  macro
+* The `upquote` package has been added to the manual's manuscript
+* Version 0.8.x can be considered stable enough; the version string has been
+  updated to 1.0.0
+
+
 ## 0.8.0 (2022-09-03)
 
 Changes:

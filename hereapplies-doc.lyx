@@ -7,6 +7,7 @@
 \textclass article
 \begin_preamble
 \usepackage{doc}
+\usepackage{upquote}
 
 \AtBeginDocument{%
 	% LyX should add automatically `\usepackage{listings}` to the preamble...
@@ -546,6 +547,13 @@ hereapplies
 \end_layout
 
 \begin_layout Standard
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset listings
 lstparams "language=TeX,numbers=none"
 inline false
@@ -560,6 +568,13 @@ phantomsection
 label{...}
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace smallskip
 \end_inset
 
 
