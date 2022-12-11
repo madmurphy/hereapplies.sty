@@ -8,7 +8,7 @@
 %
 % https://github.com/madmurphy/hereapplies.sty
 %
-% Version 1.0.0
+% Version 1.0.1
 %
 % Copyright (C) 2022 madmurphy <madmurphy333@gmail.com>
 %
@@ -66,7 +66,7 @@
 %     \end{document}
 %
 %
-\ProvidesPackage{hereapplies}[2022/09/13 Here Applies]
+\ProvidesPackage{hereapplies}[2022/12/11 Here Applies]
 \RequirePackage{hyperref}
 \RequirePackage{refcount}
 %
@@ -142,6 +142,14 @@
 %
 % Assign a unique number to each unlabeled occurrence of an identifier
 \newcounter{@ha@unlabeled@counter}
+% Populate the .hax file when the document reaches the end
+\AtEndDocument{%
+    % Do we have any content?
+    \ifdefined\@ha@commons@@haxcontent%
+        % We do - export it
+        \addtocontents{hax}{\@ha@commons@@haxcontent}%
+    \fi%
+}
 %
 %
 % Macro `\@ha@makepagelist{hypermacro}{labels}`
@@ -308,10 +316,6 @@
             {\endlinechar=\m@ne\@starttoc{hax}}%
             % Initialize the content to export to the .hax file
             \gdef\@ha@commons@@haxcontent{}%
-            % Export the content when the document reaches the end
-            \AtEndDocument{%
-                \addtocontents{hax}{\@ha@commons@@haxcontent}%
-            }%
         \fi%
         % Was a .hax file already exported during a previous run?
         \ifcsname @ha@prop@@labels@#1\endcsname\else%

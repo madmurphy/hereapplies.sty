@@ -2,6 +2,13 @@ Change Log
 ==========
 
 
+## 1.0.1 (2022-12-11)
+
+Changes:
+
+* Fix issue [#1](https://github.com/madmurphy/hereapplies.sty/issues/1)
+
+
 ## 1.0.0 (2022-09-13)
 
 Changes:
