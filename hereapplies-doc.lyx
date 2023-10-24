@@ -192,7 +192,7 @@ hereapplies*
 whereapplies*
 \family default
 ).
- In both cases an identifier is passed as argument – and this can be any
+ In both cases an identifier is passed as argument, and this can be any
  string invented in the moment (
 \family typewriter
 
@@ -219,9 +219,9 @@ hereapplies
 \backslash
 whereapplies
 \family default
- command is invoked with a known identifier, all the occurrences of the
- latter within the entire document will be printed in the form of a linkable
- page list (e.g.
+ command is invoked with a known identifier, all occurrences of the latter
+ within the entire document will be printed in the form of a linkable page
+ list (e.g.
  
 \begin_inset Quotes eld
 \end_inset

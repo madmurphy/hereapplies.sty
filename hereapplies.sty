@@ -8,7 +8,7 @@
 %
 % https://github.com/madmurphy/hereapplies.sty
 %
-% Version 1.0.1
+% Version 1.0.2
 %
 % Copyright (C) 2022 madmurphy <madmurphy333@gmail.com>
 %
@@ -66,7 +66,7 @@
 %     \end{document}
 %
 %
-\ProvidesPackage{hereapplies}[2022/12/11 Here Applies]
+\ProvidesPackage{hereapplies}[2023/10/24 Here Applies]
 \RequirePackage{hyperref}
 \RequirePackage{refcount}
 %
@@ -90,7 +90,8 @@
 %         ABSTRACT UTILITIES
 %         ==================
 %
-% These macros are not strictly related to this package, but are required.
+% The following macros are not strictly related to this package, but the latter
+% requires them.
 %
 %
 % Macro: `\@ha@ifcomma text to check,\@then{if yes}{if no}`
@@ -136,8 +137,8 @@
 %         PRIVATE ENVIRONMENT
 %         ===================
 %
-% These macros regulate the internal functioning of the package and should not
-% be invoked directly.
+% The following macros regulate the internal functioning of the package and
+% should not be invoked directly.
 %
 %
 % Assign a unique number to each unlabeled occurrence of an identifier
@@ -350,8 +351,8 @@
 %         LIBRARY ENVIRONMENT
 %         ===================
 %
-% These macros are not directly available to the user, but are callable by
-% other packages, if needed.
+% The following macros are not directly available to the user, but are callable
+% by other packages, if needed.
 %
 %
 % Macro: `\starred@nochecks@hereapplies{label}{identifiers}`
@@ -469,7 +470,7 @@
 %         USER ENVIRONMENT
 %         ================
 %
-% These macros are directly available to the user.
+% The following macros are available to the user.
 %
 %
 % Macro: `\hereapplies[label]{identifiers}`
@@ -500,7 +501,7 @@
 % Macro: `\whereapplies{identifier}`
 % *****************************************************************************
 %
-% Print all the occurrences of an identifier in the form "p. ..." or "pp. ..."
+% Print all occurrences of an identifier in the form "p. ..." or "pp. ..."
 % (with page range support)
 %
 % The `identifier` argument remains confined within the internal scope of the

@@ -2,6 +2,13 @@ Change Log
 ==========
 
 
+## 1.0.2 (2022-10-24)
+
+Changes:
+
+* Documentation
+
+
 ## 1.0.1 (2022-12-11)
 
 Changes:

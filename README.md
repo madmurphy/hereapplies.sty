@@ -14,14 +14,14 @@ that share something in common.
 
 The package offers two commands: `\hereapplies` and `\whereapplies` (plus their
 “starred” versions `\hereapplies*` and `\whereapplies*`). In both cases an
-identifier is passed as argument – and this can be any string invented in the
+identifier is passed as argument, and this can be any string invented in the
 moment (`\hereapplies` additionally supports more than one identifier in the
 form of a comma-separated list).
 
 Every time `\hereapplies` is invoked with known identifiers, the document is
 made aware that the place shares some kind of connection with other places in
 which the same identifiers were used. And so, every time the `\whereapplies`
-command is invoked with a known identifier, all the occurrences of the latter
+command is invoked with a known identifier, all occurrences of the latter
 within the entire document will be printed in the form of a linkable page list
 (e.g. “pp. 1, 5, 8–9, 14–20…”).
 

@@ -1,6 +1,6 @@
 {
 	"name": "hereapplies.sty",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "A LaTeX package for referencing groups of pages that share something in common",
 	"homepage": "https://www.ctan.org/pkg/hereapplies",
 	"author": "madmurphy",
